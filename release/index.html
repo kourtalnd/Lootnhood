@@ -23,13 +23,13 @@
 <body>
 <div class="card">
   <h1>🦝 Release the $LOOT airdrop</h1>
-  <p class="sub">One signature. This calls <span class="mono">release(1)</span> on the $LOOT token — the airdrop schedule — and moves exactly <b>20,000,000 LOOT</b> from the token's vesting into your wallet, ready for the batch distribution to the 727 MUSEBOOK holders. The treasury and milestone schedules are not touched; they keep vesting.</p>
+  <p class="sub">One signature. This calls the $LOOT token's per-schedule release for <b>schedule 1 (the airdrop)</b> with the full amount, and moves exactly <b>20,000,000 LOOT</b> from the token's vesting into your wallet, ready for the batch distribution to the 727 MUSEBOOK holders. The treasury and milestone schedules are not touched; they keep vesting.</p>
   <div class="facts">
     <div>Token: <span class="mono">0x4e1152056414c01de0b04779968a7e48b37fa8df</span></div>
     <div>Action: <b>release schedule 1 (the airdrop)</b></div>
     <div>Amount: <b>20,000,000 LOOT</b> → your wallet</div>
-    <div>Chain: <b>Robinhood Chain (4663)</b> · Gas est. ~108,579 (limit 200,000)</div>
-    <div>Verified before this page was built: the release was simulated from your wallet and succeeds; schedule 1 shows exactly 20,000,000 available.</div>
+    <div>Chain: <b>Robinhood Chain (4663)</b> · Gas est. ~79,718 (limit 200,000)</div>
+    <div>Verified before this page was built: this exact call was simulated from your wallet and succeeds; a wrong schedule number reverts, and schedule 1 shows exactly 20,000,000 available.</div>
   </div>
   <button id="connectBtn">Step 1 — Connect wallet</button>
   <button id="signBtn" disabled>Step 2 — Sign the release</button>
@@ -43,7 +43,7 @@ const TX = {
   to: '0x4e1152056414c01de0b04779968a7e48b37fa8df',
   value: '0x0',
   gas: '0x30D40',
-  data: '0x37bdc99b0000000000000000000000000000000000000000000000000000000000000001'
+  data: '0x366a41200000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000108b2a2c28029094000000'
 };
 const statusEl = document.getElementById('status');
 const connectBtn = document.getElementById('connectBtn');
