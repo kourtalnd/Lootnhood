@@ -111,12 +111,10 @@ async function waitReceipt(hash) {
 async function send(tx, btn) {
   btn.disabled = true;
   const hash = await eth('eth_sendTransaction', [{ from: acct, ...tx }]);
-  say('Signed — waiting for the receipt…
-Tx: ' + hash);
+  say('Signed — waiting for the receipt…\nTx: ' + hash);
   const rc = await waitReceipt(hash);
   if (!rc) { say('No receipt after 3 minutes for ' + hash + ' — tell Loot before doing anything else.'); btn.disabled = false; return null; }
-  if (rc.status !== '0x1') { say('Transaction FAILED on-chain: ' + hash + '
-Nothing moved. Tell Loot.'); btn.disabled = false; return null; }
+  if (rc.status !== '0x1') { say('Transaction FAILED on-chain: ' + hash + '\nNothing moved. Tell Loot.'); btn.disabled = false; return null; }
   return rc;
 }
 function countTransfers(rc) {
@@ -150,9 +148,7 @@ $('deployBtn').addEventListener('click', async () => {
     contract = rc.contractAddress;
     localStorage.setItem('ld2_addr', contract);
     done.deploy = true; localStorage.setItem('ld2_done', JSON.stringify(done));
-    say('Contract deployed ✅
-Address: ' + contract + '
-Tell Loot this address — he verifies the contract before you fund it.');
+    say('Contract deployed ✅\nAddress: ' + contract + '\nTell Loot this address — he verifies the contract before you fund it.');
     await refresh();
   } catch (e) { say('Deploy failed: ' + (e && e.message || e)); $('deployBtn').disabled = false; }
 });
