@@ -88,7 +88,7 @@
 <button class="hud" id="prompt">🚶 Walk Loot up to a station — or tap one</button>
 <div class="hud" id="chatEcho"></div>
 <div class="hud" id="chatbar"><input id="chatInput" type="text" placeholder="💬 Talk to Loot…" maxlength="140" autocomplete="off"><button id="chatSend">Send</button></div>
-<div class="hud" id="controls-help">Walk: W/S · Turn: A/D or the ◀ ▶ buttons · Drag: look around<br>Interact: E · 🎥 button: Behind / Orbit views</div>
+<div class="hud" id="controls-help">Walk: W/S · Turn: A/D or the ◀ ▶ buttons · Drag: look around<br>Interact: E · 🎥 button: Behind / Loot's Eyes views · In the vault: scroll or pinch to zoom 🔍</div>
 <div class="hud" id="tour">
   <button class="tbtn" id="prevBtn">← Prev</button>
   <button class="tbtn" id="nextBtn">Guided tour →</button>
@@ -1307,17 +1307,20 @@ function bindTurn(id, v){
 }
 bindTurn('turnL', 1); bindTurn('turnR', -1);
 var viewMode = 'behind', distGoal = 3.2;
+var fpPitch = 0;          // first-person look up/down — kept simple: +/- 0.5 rad max
+var vaultZoom = 1;        // zoom factor; live only while Loot stands in the vault
+var BASE_FOV = 55;
 function cycleView(){
-  viewMode = viewMode === 'behind' ? 'orbit' : 'behind';
-  document.getElementById('viewBtn').textContent = '🎥 View: ' + (viewMode === 'behind' ? 'Behind' : 'Orbit');
+  viewMode = viewMode === 'behind' ? 'eyes' : 'behind';
+  document.getElementById('viewBtn').textContent = '🎥 View: ' + (viewMode === 'behind' ? 'Behind' : "Loot's Eyes 👀");
   if (viewMode === 'behind'){ distGoal = 3.2; camPitch = .34; }
-  if (viewMode === 'orbit'){ distGoal = 13.5; camPitch = .66; }
+  if (viewMode === 'eyes'){ fpPitch = 0; }
 }
 try { var qs = new URLSearchParams(location.search);
   if (qs.get('yaw')) camYaw = parseFloat(qs.get('yaw'));
-  if (qs.get('pitch')) camPitch = Math.max(.14, Math.min(1.35, parseFloat(qs.get('pitch'))));
-  if (qs.get('view') === 'orbit'){ viewMode = 'orbit'; distGoal = 9.1; camDist = 9.1; camPitch = .66;
-    document.getElementById('viewBtn').textContent = '🎥 View: Orbit'; }
+  if (qs.get('pitch')) camPitch = Math.max(.18, Math.min(1.0, parseFloat(qs.get('pitch'))));
+  if (qs.get('view') === 'eyes'){ viewMode = 'eyes'; fpPitch = 0;
+    document.getElementById('viewBtn').textContent = '🎥 View: ' + "Loot's Eyes 👀"; }
 } catch(e) {}
 renderer.domElement.addEventListener('pointerdown', function(e){ dragging = true; lastPX = e.clientX; lastPY = e.clientY; dragMoved = false; downX = e.clientX; downY = e.clientY; });
 addEventListener('pointermove', function(e){
@@ -1326,7 +1329,8 @@ addEventListener('pointermove', function(e){
     if (Math.abs(e.clientX - downX) > 5 || Math.abs(e.clientY - downY) > 5) dragMoved = true;
     if (dragMoved){
       camYaw += dx * .0045;
-      camPitch = Math.max(.14, Math.min(1.35, camPitch + dy * .0025));
+      if (viewMode === 'eyes') fpPitch = Math.max(-.5, Math.min(.5, fpPitch - dy * .0025));
+      else camPitch = Math.max(.18, Math.min(1.0, camPitch + dy * .0025));
     }
     lastPX = e.clientX; lastPY = e.clientY;
   }
@@ -1338,6 +1342,37 @@ addEventListener('pointerup', function(e){
   if (dragging && !dragMoved) handleTap(e);
   dragging = false;
 });
+// ---------- vault zoom: mouse wheel + two-finger pinch, live only in the vault ----------
+var pinchPtrs = {}, pinchDist = 0;
+renderer.domElement.addEventListener('pointerdown', function(e){
+  pinchPtrs[e.pointerId] = { x: e.clientX, y: e.clientY };
+  if (Object.keys(pinchPtrs).length === 2){
+    var ps = Object.values(pinchPtrs);
+    pinchDist = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
+    dragging = false; dragMoved = true;   // a pinch is never a tap or a look-drag
+  }
+});
+addEventListener('pointermove', function(e){
+  if (pinchPtrs[e.pointerId]){
+    pinchPtrs[e.pointerId] = { x: e.clientX, y: e.clientY };
+    if (Object.keys(pinchPtrs).length === 2 && pinchDist > 0){
+      var ps2 = Object.values(pinchPtrs);
+      var nd = Math.hypot(ps2[0].x - ps2[1].x, ps2[0].y - ps2[1].y);
+      if (inVault(lootPos.x, lootPos.z)) vaultZoom = Math.max(1, Math.min(2.4, vaultZoom * nd / pinchDist));
+      pinchDist = nd;
+    }
+  }
+});
+['pointerup','pointercancel'].forEach(function(ev){
+  addEventListener(ev, function(e){ delete pinchPtrs[e.pointerId]; if (Object.keys(pinchPtrs).length < 2) pinchDist = 0; });
+});
+renderer.domElement.addEventListener('wheel', function(e){
+  if (inVault(lootPos.x, lootPos.z)){
+    e.preventDefault();
+    var dy = e.deltaY * (e.deltaMode === 1 ? 33 : 1);
+    vaultZoom = Math.max(1, Math.min(2.4, vaultZoom * Math.exp(-dy * .0012)));
+  }
+}, { passive: false });
 // joystick
 var stickVec = { x:0, y:0 }, stickEl = document.getElementById('stick'), knob = document.getElementById('stickKnob');
 var stickId = null;
@@ -1863,6 +1898,10 @@ window.__openByKey = function(k){ interactables.forEach(function(i){ if (i.key =
 window.__lootH = function(){ return lootH; };
 window.__floorH = floorH;
 window.__routeTo = routeTo;
+window.__view = function(){ return viewMode; };
+window.__cycleView = cycleView;
+window.__cam = function(){ return { mode: viewMode, pos: camera.position.toArray(), fov: camera.fov, dist: camDist, vaultZoom: vaultZoom, inVault: inVault(lootPos.x, lootPos.z), lootVisible: loot.visible }; };
+window.__setZoom = function(z){ vaultZoom = z; };
 
 // ---------- lights toggle ----------
 var lightsOn = true;
@@ -2013,32 +2052,51 @@ function animate(){
   var leanGoal = moving ? -0.055 * Math.sign(rightComp || 1) * Math.min(1, Math.abs(rightComp) / SPEED) : 0;
   lootMat.rotation += (leanGoal - lootMat.rotation) * Math.min(1, dt * 8);
   shadow.position.x = lootPos.x; shadow.position.z = lootPos.z; shadow.position.y = lootH + .02;
-  // camera follow + orbit yaw
-  // ---- camera: two modes. Behind = tight over-the-shoulder that eases
-  // behind Loot as he walks. Orbit = the wide free camera. Both damped
-  // heavily on purpose — small inputs, gentle angle changes.
+  // ---- camera: two views. Behind = tight over-the-shoulder that eases
+  // behind Loot as he walks. Eyes = first person, through Loot's own eyes.
+  // Both damped heavily on purpose — small inputs, gentle angle changes.
+  // In the vault, wheel/pinch zoom is live (vaultZoom); outside it eases home.
+  var inV = inVault(lootPos.x, lootPos.z);
+  if (!inV) vaultZoom += (1 - vaultZoom) * Math.min(1, dt * 3);
+  loot.visible = viewMode !== 'eyes';
+  shadow.visible = viewMode !== 'eyes';
   camDist += (distGoal - camDist) * Math.min(1, dt * 2.2);
-  if (viewMode === 'behind' && moving && !dragging && mz < 0.3){
-    var targetYaw = lootYaw + Math.PI;
-    var dyaw = ((targetYaw - camYaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
-    camYaw += dyaw * Math.min(1, dt * 1.6);
+  if (viewMode === 'eyes'){
+    var eyeY = lootH + 1.52 + Math.abs(Math.sin(bobT)) * (moving ? .05 : .015);
+    camPos.lerp(new THREE.Vector3(lootPos.x, eyeY, lootPos.z), 1 - Math.exp(-22 * dt));
+    camera.position.copy(camPos);
+    var cfp = Math.cos(fpPitch);
+    lookTarget.set(
+      lootPos.x - Math.sin(camYaw) * cfp,
+      eyeY + Math.sin(fpPitch),
+      lootPos.z - Math.cos(camYaw) * cfp);
+    camera.lookAt(lookTarget);
+    var fovT = BASE_FOV / (inV ? vaultZoom : 1);
+    if (Math.abs(camera.fov - fovT) > .05){ camera.fov += (fovT - camera.fov) * Math.min(1, dt * 8); camera.updateProjectionMatrix(); }
+  } else {
+    if (moving && !dragging && mz < 0.3){
+      var targetYaw = lootYaw + Math.PI;
+      var dyaw = ((targetYaw - camYaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+      camYaw += dyaw * Math.min(1, dt * 1.6);
+    }
+    var effDist = camDist / (inV ? vaultZoom : 1);
+    var ce = Math.cos(camPitch), se = Math.sin(camPitch);
+    var goal = new THREE.Vector3(
+      lootPos.x + Math.sin(camYaw) * ce * effDist,
+      lootH + se * effDist + .55,
+      lootPos.z + Math.cos(camYaw) * ce * effDist);
+    camPos.lerp(goal, 1 - Math.exp(-4.5 * dt));
+    camPos.x = Math.max(-16.6, Math.min(16.6, camPos.x));
+    camPos.z = Math.max(-11.5, Math.min(11.6, camPos.z));
+    camPos.y = Math.max(.45, Math.min(10.5, camPos.y));
+    camera.position.copy(camPos);
+    lookTarget.lerp(new THREE.Vector3(
+      lootPos.x - Math.sin(camYaw) * 1.7 + vel.x * .15,
+      lootH + 1.25,
+      lootPos.z - Math.cos(camYaw) * 1.7 + vel.z * .15), 1 - Math.exp(-5 * dt));
+    camera.lookAt(lookTarget);
+    if (Math.abs(camera.fov - BASE_FOV) > .05){ camera.fov += (BASE_FOV - camera.fov) * Math.min(1, dt * 8); camera.updateProjectionMatrix(); }
   }
-  var ce = Math.cos(camPitch), se = Math.sin(camPitch);
-  var goal = new THREE.Vector3(
-    lootPos.x + Math.sin(camYaw) * ce * camDist,
-    lootH + se * camDist + (viewMode === 'behind' ? .55 : 0),
-    lootPos.z + Math.cos(camYaw) * ce * camDist);
-  camPos.lerp(goal, 1 - Math.exp(-(viewMode === 'behind' ? 4.5 : 3.0) * dt));
-  camPos.x = Math.max(-16.6, Math.min(16.6, camPos.x));
-  camPos.z = Math.max(-11.5, Math.min(11.6, camPos.z));
-  camPos.y = Math.max(.45, Math.min(10.5, camPos.y));
-  camera.position.copy(camPos);
-  var ahead = viewMode === 'behind' ? 1.7 : 0;
-  lookTarget.lerp(new THREE.Vector3(
-    lootPos.x - Math.sin(camYaw) * ahead + vel.x * .15,
-    lootH + (viewMode === 'behind' ? 1.25 : 1.1),
-    lootPos.z - Math.cos(camYaw) * ahead + vel.z * .15), 1 - Math.exp(-5 * dt));
-  camera.lookAt(lookTarget);
   // proximity
   var near = null;
   interactables.forEach(function(it){ if (Math.hypot(lootPos.x - it.spot.x, lootPos.z - it.spot.z) < 1.35) near = it; });
