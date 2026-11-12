@@ -70,14 +70,10 @@ signBtn.addEventListener('click', async () => {
     signBtn.disabled = true;
     say('Sending to MetaMask — confirm the transaction there…');
     const hash = await window.ethereum.request({ method: 'eth_sendTransaction', params: [{ from: connectedAcct, ...TX }] });
-    say('Signed ✅
-Tx: ' + hash + '
-
-The 20,000,000 LOOT is moving to your new wallet. Tell Loot the hash (or just say “done”) and the safe batch distribution starts.');
+    say('Signed ✅\nTx: ' + hash + '\n\nThe 20,000,000 LOOT is moving to your new wallet. Tell Loot the hash (or just say “done”) and the safe batch distribution starts.');
   } catch (e) {
     signBtn.disabled = false;
-    say('Signing failed or was rejected: ' + (e && e.message || e) + '
-Nothing was sent. You can try Step 2 again.');
+    say('Signing failed or was rejected: ' + (e && e.message || e) + '\nNothing was sent. You can try Step 2 again.');
   }
 });
 </script>
