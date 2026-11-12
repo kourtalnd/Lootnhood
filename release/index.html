@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Release the $LOOT Airdrop — Owner Signature</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#0d1512; color:#e8f0ea; margin:0; padding:24px 16px 48px; }
+  .card { max-width:560px; margin:0 auto; background:#14211a; border:1px solid #2fe07a33; border-radius:16px; padding:24px; }
+  h1 { font-size:22px; margin:0 0 6px; }
+  .sub { color:#a9bdae; font-size:14px; margin:0 0 18px; line-height:1.5; }
+  .facts { background:#0d1512; border:1px solid #ffffff1a; border-radius:12px; padding:14px 16px; margin:0 0 18px; font-size:14px; line-height:1.9; }
+  .facts b { color:#ffd97a; }
+  .mono { font-family: ui-monospace, Menlo, monospace; font-size:12px; word-break:break-all; }
+  button { width:100%; padding:14px; font-size:16px; font-weight:700; border:0; border-radius:12px; cursor:pointer; margin:0 0 10px; }
+  #connectBtn { background:#2fe07a; color:#08130c; }
+  #signBtn { background:#ffd97a; color:#171106; }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  #status { font-size:14px; line-height:1.6; color:#cfe3d4; min-height:24px; margin-top:8px; white-space:pre-wrap; }
+  .warn { color:#f5b04c; font-size:13px; line-height:1.5; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🦝 Release the $LOOT airdrop</h1>
+  <p class="sub">One signature. This calls <span class="mono">release(1)</span> on the $LOOT token — the airdrop schedule — and moves exactly <b>20,000,000 LOOT</b> from the token's vesting into your wallet, ready for the batch distribution to the 727 MUSEBOOK holders. The treasury and milestone schedules are not touched; they keep vesting.</p>
+  <div class="facts">
+    <div>Token: <span class="mono">0x4e1152056414c01de0b04779968a7e48b37fa8df</span></div>
+    <div>Action: <b>release schedule 1 (the airdrop)</b></div>
+    <div>Amount: <b>20,000,000 LOOT</b> → your wallet</div>
+    <div>Chain: <b>Robinhood Chain (4663)</b> · Gas est. ~108,579 (limit 200,000)</div>
+    <div>Verified before this page was built: the release was simulated from your wallet and succeeds; schedule 1 shows exactly 20,000,000 available.</div>
+  </div>
+  <button id="connectBtn">Step 1 — Connect wallet</button>
+  <button id="signBtn" disabled>Step 2 — Sign the release</button>
+  <div id="status">Waiting. Open this page in the browser where MetaMask holds the owner wallet (…a5504).</div>
+  <p class="warn">Only sign if the connected account ends in …a5504. This page cannot move anything else — it carries one fixed transaction to the token contract.</p>
+</div>
+<script>
+const EXPECTED = '0x4d6dce1910d37ea96b728b6c3c87e5a2a21a5504';
+const CHAIN_ID_HEX = '0x1237'; // 4663
+const TX = {
+  to: '0x4e1152056414c01de0b04779968a7e48b37fa8df',
+  value: '0x0',
+  gas: '0x30D40',
+  data: '0x37bdc99b0000000000000000000000000000000000000000000000000000000000000001'
+};
+const statusEl = document.getElementById('status');
+const connectBtn = document.getElementById('connectBtn');
+const signBtn = document.getElementById('signBtn');
+let connectedAcct = null;
+function say(t) { statusEl.textContent = t; }
+
+connectBtn.addEventListener('click', async () => {
+  try {
+    if (!window.ethereum) { say('No wallet found in this browser. Open this page inside MetaMask\u2019s browser.'); return; }
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    connectedAcct = (accounts && accounts[0] || '').toLowerCase();
+    if (connectedAcct !== EXPECTED) { say('Connected account ' + connectedAcct + ' is NOT the owner wallet (\u2026a5504). Switch accounts in MetaMask and try again.'); return; }
+    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    if (chainId !== CHAIN_ID_HEX) {
+      try { await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: CHAIN_ID_HEX }] }); }
+      catch (e) {
+        if (e && e.code === 4902) {
+          await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId: CHAIN_ID_HEX, chainName: 'Robinhood Chain', nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 }, rpcUrls: ['https://rpc.mainnet.chain.robinhood.com'], blockExplorerUrls: ['https://robinhoodchain.blockscout.com'] }] });
+        } else { say('Please switch MetaMask to Robinhood Chain (4663), then tap Connect again.'); return; }
+      }
+    }
+    say('Connected: owner wallet on Robinhood Chain. Ready — tap Step 2 to sign the release.');
+    signBtn.disabled = false;
+  } catch (e) { say('Connect failed: ' + (e && e.message || e)); }
+});
+
+signBtn.addEventListener('click', async () => {
+  try {
+    signBtn.disabled = true;
+    say('Sending to MetaMask — confirm the transaction there\u2026');
+    const hash = await window.ethereum.request({ method: 'eth_sendTransaction', params: [{ from: connectedAcct, ...TX }] });
+    say('Signed \u2705\nTx: ' + hash + '\n\nThe 20,000,000 LOOT is moving to your wallet. Tell Loot the hash (or just say \u201Cdone\u201D) and the batch distribution to the 727 wallets starts.');
+  } catch (e) {
+    signBtn.disabled = false;
+    say('Signing failed or was rejected: ' + (e && e.message || e) + '\nNothing was sent. You can try Step 2 again.');
+  }
+});
+</script>
+</body>
+</html>
