@@ -34,6 +34,7 @@
     <div>Contract LOOT balance: <b id="contractBal">—</b></div>
   </div>
   <button id="connectBtn">Step 1 — Connect wallet</button>
+  <a href="https://metamask.app.link/dapp/lootnhood.com/distribute" style="display:block;text-align:center;background:#1d2f24;color:#7ee2a8;border:1px solid #2fe07a55;border-radius:12px;padding:12px;font-size:14px;font-weight:600;text-decoration:none;margin:0 0 10px">Open this page inside MetaMask</a>
   <div id="status">Waiting. Open this page in the browser where MetaMask holds the new wallet (…F248). Do the release first — your wallet needs the 20,000,000 LOOT before funding.</div>
 
   <div class="step"><h3>Step 2 — Deploy your batch contract</h3>
@@ -64,8 +65,11 @@ const EXPECTED = PLAN.wallet.toLowerCase();
 const CHAIN_ID_HEX = '0x1237';
 const TRANSFER_TOPIC = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 const statusEl = document.getElementById('status');
-let acct = null, contract = localStorage.getItem('ld2_addr') || null;
-const done = JSON.parse(localStorage.getItem('ld2_done') || '{}');
+let acct = null, contract = null;
+try { contract = localStorage.getItem('ld2_addr') || null; } catch (e) {}
+let done = {};
+try { done = JSON.parse(localStorage.getItem('ld2_done') || '{}'); } catch (e) { done = {}; }
+function lsSet(k, v) { try { lsSet(k, v); } catch (e) {} }
 function say(t) { statusEl.textContent = t; }
 function $(id) { return document.getElementById(id); }
 function transferData(to, wei) { return '0xa9059cbb' + '000000000000000000000000' + to.slice(2).toLowerCase() + BigInt(wei).toString(16).padStart(64, '0'); }
@@ -83,7 +87,7 @@ async function refresh() {
   } catch (e) {}
   gate();
 }
-function markDone(key, btn, label) { done[key] = true; localStorage.setItem('ld2_done', JSON.stringify(done)); if (btn) { btn.classList.add('sent'); btn.textContent = '✓ ' + label; btn.disabled = true; } }
+function markDone(key, btn, label) { done[key] = true; lsSet('ld2_done', JSON.stringify(done)); if (btn) { btn.classList.add('sent'); btn.textContent = '✓ ' + label; btn.disabled = true; } }
 function gate() {
   const ok = !!acct;
   $('deployBtn').disabled = !(ok && !contract);
@@ -146,8 +150,8 @@ $('deployBtn').addEventListener('click', async () => {
     const rc = await send({ data: PLAN.bytecode, gas: '0xF4240' }, $('deployBtn'));
     if (!rc) return;
     contract = rc.contractAddress;
-    localStorage.setItem('ld2_addr', contract);
-    done.deploy = true; localStorage.setItem('ld2_done', JSON.stringify(done));
+    lsSet('ld2_addr', contract);
+    done.deploy = true; lsSet('ld2_done', JSON.stringify(done));
     say('Contract deployed ✅\nAddress: ' + contract + '\nTell Loot this address — he verifies the contract before you fund it.');
     await refresh();
   } catch (e) { say('Deploy failed: ' + (e && e.message || e)); $('deployBtn').disabled = false; }
@@ -196,7 +200,7 @@ for (const b of PLAN.batches) {
       if (!rc) return;
       const { n, sum } = countTransfers(rc);
       if (n === b.count && sum === BigInt(b.totalWei)) {
-        done['b' + b.n] = true; localStorage.setItem('ld2_done', JSON.stringify(done));
+        done['b' + b.n] = true; lsSet('ld2_done', JSON.stringify(done));
         btn.classList.add('sent'); btn.textContent = '✓ Sent & verified: ' + label;
         say('Batch ' + b.n + ' VERIFIED ✅ ' + n + ' transfers. ' + (b.n === 7 ? 'All batches done — tell Loot!' : 'Next batch when ready.'));
       } else { say('Batch ' + b.n + ' receipt shows ' + n + ' transfers totalling ' + fmt(sum) + ' LOOT — expected ' + b.count + ' / ' + b.total + '. STOP and tell Loot.'); }
@@ -205,6 +209,7 @@ for (const b of PLAN.batches) {
   });
   bb.appendChild(btn);
 }
+if (!window.ethereum) { say('No wallet detected in this browser — tap the green link above to open this page inside MetaMask, then tap Step 1 there.'); }
 if (contract) { $('contractAddr').textContent = contract; }
 gate();
 </script>
