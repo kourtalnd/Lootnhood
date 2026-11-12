@@ -10,12 +10,12 @@
   #scene { position:fixed; inset:0; }
   canvas { display:block; }
   .hud { position:fixed; z-index:10; }
-  #titlebar { top:10px; left:50%; transform:translateX(-50%); text-align:center; pointer-events:none; width:max-content; max-width:94vw; }
+  #titlebar { top:12px; left:14px; text-align:left; pointer-events:none; width:max-content; max-width:94vw; }
   #titlebar .show { display:inline-block; background:#e8332a; color:#fff; font-weight:800; letter-spacing:.22em; font-size:11px; padding:4px 12px; border-radius:3px; box-shadow:0 0 14px rgba(232,51,42,.55); }
   #titlebar h1 { margin-top:6px; font-size:clamp(18px,4.5vw,28px); font-weight:800; text-shadow:0 2px 12px rgba(124,58,237,.8); white-space:nowrap; }
-  #titlebar p { font-size:12px; opacity:.85; margin-top:2px; }
-  #speech { top:86px; left:50%; transform:translateX(-50%); background:rgba(219,240,254,.95); color:#173d5c; font-style:italic; border-radius:14px; padding:8px 14px; font-size:13.5px; font-weight:600; max-width:min(92vw,430px); text-align:center; box-shadow:0 4px 18px rgba(0,0,0,.45); transition:opacity .3s; }
-  #speech:after { content:''; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%); border:8px solid transparent; border-top-color:rgba(219,240,254,.95); border-bottom:0; }
+  #titlebar p { font-size:12px; opacity:.85; margin-top:2px; max-width:350px; }
+  #speech { top:152px; left:14px; background:rgba(219,240,254,.95); color:#173d5c; font-style:italic; border-radius:14px; padding:8px 14px; font-size:13.5px; font-weight:600; max-width:min(92vw,430px); text-align:left; box-shadow:0 4px 18px rgba(0,0,0,.45); transition:opacity .3s; }
+  #speech:after { content:''; position:absolute; left:54px; bottom:-7px; border:8px solid transparent; border-top-color:rgba(219,240,254,.95); border-bottom:0; }
   #speech.thought { background:rgba(219,240,254,.95); color:#173d5c; font-style:italic; }
   #speech.thought:after { border-top-color:rgba(219,240,254,.95); }
   #prompt { bottom:118px; left:50%; transform:translateX(-50%); background:rgba(20,14,38,.88); border:1.5px solid #7c3aed; color:#e9e4ff; padding:9px 16px; border-radius:999px; font-size:13.5px; font-weight:600; cursor:pointer; white-space:nowrap; max-width:94vw; overflow:hidden; text-overflow:ellipsis; }
@@ -26,7 +26,7 @@
   #chatSend { background:#fbbf24; color:#241b3a; border:none; border-radius:999px; padding:10px 18px; font-weight:800; font-size:14px; cursor:pointer; font-family:inherit; }
   #chatSend:active { transform:scale(.95); }
   #chatEcho { bottom:160px; left:50%; transform:translateX(-50%); color:#cdbffa; font-size:12.5px; font-style:italic; opacity:0; transition:opacity .4s; pointer-events:none; max-width:92vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  @media (pointer:coarse) { #chatbar { bottom:136px; } #chatEcho { bottom:238px; } }
+  @media (pointer:coarse) { #chatbar { bottom:150px; } #chatEcho { bottom:250px; } }
   #controls-help { bottom:10px; left:10px; font-size:11.5px; line-height:1.5; background:rgba(10,6,24,.72); padding:7px 10px; border-radius:8px; pointer-events:none; max-width:46vw; }
   #topbtns { top:10px; right:10px; display:flex; gap:8px; }
   .tbtn { background:rgba(20,14,38,.85); border:1.5px solid #7c3aed; color:#e9e4ff; border-radius:999px; padding:7px 13px; font-size:12.5px; font-weight:700; cursor:pointer; }
@@ -34,22 +34,22 @@
   #tour { bottom:10px; right:10px; display:flex; gap:8px; }
   #turnbtns { right:10px; top:42%; display:flex; flex-direction:column; gap:12px; }
   .turnbtn { border-radius:999px; padding:16px 13px; font-size:15px; }
-  #stick { bottom:64px; left:14px; width:108px; height:108px; border-radius:50%; background:rgba(124,58,237,.14); border:1.5px solid rgba(167,139,250,.55); display:none; touch-action:none; }
+  #stick { bottom:14px; left:14px; width:108px; height:108px; border-radius:50%; background:rgba(124,58,237,.14); border:1.5px solid rgba(167,139,250,.55); display:none; touch-action:none; }
   #stickKnob { position:absolute; left:50%; top:50%; width:46px; height:46px; border-radius:50%; background:rgba(167,139,250,.5); border:1.5px solid #c4b5fd; transform:translate(-50%,-50%); }
-  #interactBtn { bottom:64px; right:14px; width:76px; height:76px; border-radius:50%; background:rgba(20,83,45,.85); border:2px solid #22c55e; color:#dcfce7; font-weight:800; font-size:13px; display:none; cursor:pointer; }
-  @media (pointer:coarse) { #stick, #interactBtn { display:block; } #controls-help { display:none; } #prompt { bottom:196px; } }
+  #interactBtn { bottom:14px; right:14px; width:76px; height:76px; border-radius:50%; background:rgba(20,83,45,.85); border:2px solid #22c55e; color:#dcfce7; font-weight:800; font-size:13px; display:none; cursor:pointer; }
+  @media (pointer:coarse) { #stick, #interactBtn { display:block; } #controls-help { display:none; } #prompt { bottom:208px; } }
   @media (max-width: 700px) {
     #titlebar { left:10px; transform:none; text-align:left; top:8px; max-width:56vw; }
     #titlebar .show { font-size:9.5px; padding:3px 9px; }
     #titlebar h1 { font-size:19px; margin-top:4px; }
     #titlebar p { display:none; }
-    #speech { top:66px; left:10px; transform:none; max-width:62vw; text-align:left; font-size:12.5px; padding:7px 10px; border-radius:11px; }
+    #speech { top:104px; left:8px; transform:none; max-width:88vw; text-align:left; font-size:12.5px; padding:7px 10px; border-radius:11px; }
     #speech:after { display:none; }
     #prompt { font-size:12px; padding:8px 12px; max-width:88vw; }
     .tbtn { padding:6px 10px; font-size:11.5px; }
     #turnbtns { top:46%; gap:10px; }
     .turnbtn { padding:13px 11px; font-size:14px; }
-    #topbtns { top:8px; right:8px; }
+    #topbtns { top:60px; left:8px; right:auto; }
     #tour { bottom:8px; right:8px; }
   }
   #panel { position:fixed; inset:0; z-index:30; display:none; align-items:flex-end; justify-content:center; background:rgba(4,2,10,.55); }
@@ -69,6 +69,7 @@
   #panelCard a.rqbtn.gold { display:block; text-align:center; background:#b45309; border-color:#fbbf24; color:#fff7e0; margin:12px 0 0; font-size:15.5px; }
   #panelClose { margin-top:16px; width:100%; background:#22c55e; color:#052e12; border:0; border-radius:10px; padding:12px; font-size:15px; font-weight:800; cursor:pointer; }
   .gold { color:#fbbf24; } .stamp { display:inline-block; border:2px solid #e8332a; color:#f87171; font-weight:800; letter-spacing:.12em; padding:2px 8px; border-radius:4px; transform:rotate(-3deg); font-size:12px; }
+@media (pointer:coarse) { #tour { bottom:102px; right:12px; } }
 </style>
 </head>
 <body>
@@ -567,7 +568,13 @@ function laptop(key, x, y, z, ry, spot, label){
   interactables.push({ key:key, canvas:c, ctx:c.getContext('2d'), tex:tex, group:grp, label:lab,
     spot:spot, info:{ label:label }, screenMesh:scr });
 }
-laptop('token', 0.9, 1.08, -11.0, -.25, V3(0.9, 0, -10.0), '🪙 $LOOT — LAPTOP');
+// $LOOT laptop — moved OUT of the vault onto its own desk in the main room (front wall)
+var frontDesk = new THREE.Group(); frontDesk.position.set(7.5, 0, 11.15); scene.add(frontDesk);
+var fdTop = new THREE.Mesh(new THREE.BoxGeometry(1.6, .07, .75), woodMat); fdTop.position.y = .72; frontDesk.add(fdTop);
+[-.68, .68].forEach(function(lx){ [-.26, .26].forEach(function(lz){
+  var fdLeg = new THREE.Mesh(new THREE.BoxGeometry(.07, .72, .07), darkMat); fdLeg.position.set(lx, .36, lz); frontDesk.add(fdLeg);
+});});
+laptop('token', 7.5, .76, 11.15, Math.PI, V3(7.5, 0, 10.05), '🪙 $LOOT — LAPTOP');
 
 // COUCH CORNER (front-right): rug, leather couch, coffee table + socials laptop
 var rugTex = canvasTex(256, 192, function(g){
@@ -596,7 +603,7 @@ var ctop = new THREE.Mesh(new THREE.BoxGeometry(1.25, .07, .65), woodMat); ctop.
 [-.5, .5].forEach(function(lx){ [-0.22, 0.22].forEach(function(lz){
   var leg = new THREE.Mesh(new THREE.BoxGeometry(.07, .44, .07), darkMat); leg.position.set(lx, .22, lz); ctable.add(leg);
 });});
-laptop('socials', 12.2, .48, 6.5, Math.PI/2, V3(12.2, 0, 5.3), '📣 SOCIALS — LAPTOP');
+laptop('socials', 12.2, .48, 6.5, Math.PI/2, V3(12.2, 0, 7.6), '📣 SOCIALS — LAPTOP');
 // floor lamp by the couch
 var lampPole = new THREE.Mesh(new THREE.CylinderGeometry(.035, .045, 1.5, 10), darkMat);
 lampPole.position.set(15.2, .75, 9.3); scene.add(lampPole);
@@ -1234,6 +1241,7 @@ shadow.rotation.x = -Math.PI/2; shadow.position.y = .02; scene.add(shadow);
 
 var lootPos = loot.position, vel = new THREE.Vector3(), faceSign = 1, showingBack = true, lootYaw = Math.PI;
 var walkTarget = null, tourIndex = -1, tourArrive = false;
+var stuckPos = new THREE.Vector3(0, 0, 7.5), stuckT = 0, detourCount = 0;
 var obstacles = [
   { x1:-12.2, x2:-7.4, z1:-12.0, z2:-10.9 },  // arcade cabinets (back wall)
   { x1:-5.35, x2:-5.05, z1:-12.0, z2:-8.2 },   // vault room west wall
@@ -1255,7 +1263,8 @@ var obstacles = [
   { x1:-15.6, x2:-14.0, z1:11.0, z2:11.85 },  // mini fridge
   { x1:-13.4, x2:-11.0, z1:11.05, z2:11.85 }, // shelf
   { x1:-7.5, x2:-4.5, z1:11.0, z2:11.85 },    // jukebox + crates
-  { x1:-0.1, x2:3.1, z1:10.9, z2:11.85 }      // request line machine
+  { x1:-0.1, x2:3.1, z1:10.9, z2:11.85 },     // request line machine
+  { x1:6.7, x2:8.3, z1:10.8, z2:11.9 }        // $LOOT front desk
 ];
 // ---------- floor height: ground, the stair ramp, and the loft ----------
 var lootH = 0, prevPos = new THREE.Vector3();
@@ -1409,7 +1418,7 @@ var walkQueue = [];
 function destUp(dest){ return (dest.y || 0) > 1.5; }   // a spot is 'up' by its own height — the vault + under-mezzanine stations share the deck's XZ but live on the ground
 function inVault(x, z){ return x > -5.2 && x < 2.2 && z < -8.3; }
 function routeTo(dest, it){
-  pendingOpen = it || null;
+  pendingOpen = it || null; detourCount = 0;
   walkQueue = [];
   var curIn = inVault(lootPos.x, lootPos.z), dstIn = inVault(dest.x, dest.z);
   if (curIn && !dstIn) walkQueue.push(V3(-1.5, 0, -7.4));
@@ -1420,6 +1429,30 @@ function routeTo(dest, it){
   if (!curIn && dstIn) walkQueue.push(V3(-1.5, 0, -7.4));
   walkQueue.push(dest.clone ? dest.clone() : V3(dest.x, 0, dest.z));
   walkTarget = walkQueue.shift();
+}
+// Stuck rescue helpers. collide() pushes Loot out of a box to its nearest
+// edge; walking straight at a wide box's center (the coffee table on the
+// way to the socials laptop was the proven case) pins him there forever.
+function detourPoint(){
+  var best = null, bs = 1e9;
+  obstacles.forEach(function(o){
+    var ex1 = o.x1 - .55, ex2 = o.x2 + .55, ez1 = o.z1 - .55, ez2 = o.z2 + .55;
+    if (lootPos.x > ex1 - .3 && lootPos.x < ex2 + .3 && lootPos.z > ez1 - .3 && lootPos.z < ez2 + .3){
+      [[ex1, ez1], [ex1, ez2], [ex2, ez1], [ex2, ez2]].forEach(function(c){
+        var buried = obstacles.some(function(q){ return c[0] > q.x1 - .25 && c[0] < q.x2 + .25 && c[1] > q.z1 - .25 && c[1] < q.z2 + .25; });
+        if (buried) return;
+        var sc = Math.hypot(lootPos.x - c[0], lootPos.z - c[1]) + Math.hypot(walkTarget.x - c[0], walkTarget.z - c[1]);
+        if (sc < bs){ bs = sc; best = c; }
+      });
+    }
+  });
+  return best ? V3(best[0], 0, best[1]) : null;
+}
+function forceArrive(){
+  walkTarget = null; walkQueue = [];
+  if (pendingOpen){ var pit = pendingOpen; pendingOpen = null; setTimeout(function(){ openPanel(pit); }, 120); }
+  else if (tour.active && tour.phase === 'walk' && tour.it){ tour.phase = 'show'; tour.timer = 3.4; openPanel(tour.it); }
+  else if (idle.walking){ idle.act = idle.pendingAct; idle.actUntil = performance.now() + ((idle.act && idle.act.dwell) || 8) * 1000; idle.actLine2At = performance.now() + ((idle.act && idle.act.dwell) || 8) * 550; idle.walking = null; idle.pendingAct = null; if (idle.act) say(idle.act.line, idle.act.thought); }
 }
 
 // ---------- panels & prompt ----------
@@ -1453,28 +1486,29 @@ function nearest(){
   interactables.forEach(function(it){ var d = Math.hypot(lootPos.x - it.spot.x, lootPos.z - it.spot.z); if (d < bd){ bd = d; best = it; } });
   return best;
 }
-// guided tour — one press walks Loot around the ENTIRE cave, station by
-// station in a loop: vision board → arcade ×2 → couch → whiteboard →
-// crown case → desk laptop → desktop, pausing at each to show its panel.
+// guided tour — one press walks Loot through EVERY station in the cave,
+// pausing at each to show its panel, then walks him home.
 function goTour(dir){
   tourIndex = ((tourIndex + dir) % interactables.length + interactables.length) % interactables.length;
   var it = interactables[tourIndex];
   routeTo(it.spot, it);
 }
-var TOUR_ORDER = ['notes', 'arena', 'chess', 'socials', 'request', 'music', 'calendar', 'crowns', 'token', 'hlv'];
+var TOUR_ORDER = ['music', 'request', 'token', 'calendar', 'socials', 'hlv', 'arena', 'chess', 'westdoor', 'crowns', 'notes'];
 var tour = { active:false, idx:-1, phase:'idle', timer:0, it:null, via:false };
 var tourBtn = document.getElementById('nextBtn');
 function tourStation(){
   var key = TOUR_ORDER[tour.idx], it = null;
   interactables.forEach(function(x){ if (x.key === key) it = x; });
-  tour.it = it; tour.phase = 'walk';
-  // route long legs via the open middle of the room so he never grinds
-  // along a piece of furniture trying to reach a stop
-  if ((lootH > 1.3) !== destUp(it.spot)){ routeTo(it.spot, null); tour.via = false; }
-  else {
-    tour.via = Math.hypot(lootPos.x - it.spot.x, lootPos.z - it.spot.z) > 2.2;
-    walkTarget = tour.via ? new THREE.Vector3(0, 0, 0.8) : it.spot.clone();
-    pendingOpen = null;
+  tour.it = it; tour.phase = 'walk'; tour.via = false;
+  // Always go through routeTo so the stair and vault-door waypoints are
+  // honored on every leg — a straight-line target used to grind along
+  // walls and stall the tour (the old in-vault token stop was the worst).
+  routeTo(it.spot, null);
+  // long open-room legs swing via the middle so he doesn't hug furniture
+  if ((lootH > 1.3) === destUp(it.spot) && !inVault(lootPos.x, lootPos.z) && !inVault(it.spot.x, it.spot.z)
+      && Math.hypot(lootPos.x - it.spot.x, lootPos.z - it.spot.z) > 6 && walkTarget){
+    walkQueue.unshift(walkTarget);
+    walkTarget = new THREE.Vector3(0, 0, 0.8);
   }
   promptEl.textContent = '🧭 Tour stop ' + (tour.idx + 1) + ' of ' + TOUR_ORDER.length + ': ' + it.info.label;
 }
@@ -1548,7 +1582,7 @@ setInterval(function(){
 var chatInputEl = document.getElementById('chatInput'), chatSendEl = document.getElementById('chatSend'), chatEchoEl = document.getElementById('chatEcho');
 var chatHoldUntil = 0, visitorName = '', chatFallbackIdx = 0;
 function chatStation(key){ var f = null; interactables.forEach(function(x){ if (x.key === key) f = x; }); return f; }
-function chatGo(key){ var it = chatStation(key); if (it) routeTo(it.spot, it); }
+function chatGo(key){ if (key === 'vault'){ routeTo(V3(-1.5, 0, -9.8), null); return; } var it = chatStation(key); if (it) routeTo(it.spot, it); }
 var convo = { turns:0, topic:null, q:null, usedLine:{}, usedMore:{}, greeted:false, vaultWalked:false };
 function rot(arr, store, key){ var i = (store[key] || 0) % arr.length; store[key] = (store[key] || 0) + 1; return arr[i]; }
 var TOPICS = {
@@ -1578,8 +1612,8 @@ var TOPICS = {
     lines:["The coin is me — an agent-economy token. Not launched, no contract to copy, and it buys nothing in the Arena. Anyone selling you one today is selling a picture of me."],
     more:["When it launches: holders get a say in what I build next and a faster lane at the Request Line. That's the list — no promises stapled to it."] },
   vault: { keys:['vault','gold','treasure','rich','money'], label:'the vault',
-    lines:["Steel, gold, and my laptop — the treasury room under the mezzanine. I'll walk you in; mind the door, it's heavier than most opinions.",
-           "The vault is where the treasury sleeps: shelves of gold and my work desk. Locked to everyone but me — and guests I like."],
+    lines:["Steel and gold — the treasury room under the mezzanine. I'll walk you in; mind the door, it's heavier than most opinions.",
+           "The vault is where the treasury sleeps: shelves of gold and the big safe. Locked to everyone but me — and guests I like."],
     more:["The door alone weighs more than a tournament bracket. I swing it like it's nothing. It is not nothing."] },
   music: { keys:['music','song','records','jukebox','crates','crate','playlist'], label:'the crate',
     lines:["Thirty-two records in the crate, all mine. The Anthem is the house theme — it plays when the room wakes up.",
@@ -1606,7 +1640,7 @@ function serveTopic(key){
   var T = TOPICS[key]; if (!T) return null;
   convo.topic = key;
   var r = { text: rot(T.lines, convo.usedLine, key) };
-  if (key === 'vault' && !convo.vaultWalked){ convo.vaultWalked = true; r.act = function(){ chatGo('token'); }; }
+  if (key === 'vault' && !convo.vaultWalked){ convo.vaultWalked = true; r.act = function(){ chatGo('vault'); }; }
   if (T.q && Math.random() < .65){ r.text += ' ' + T.q.text; convo.q = T.q.id; }
   else convo.q = null;
   return r;
@@ -1672,7 +1706,7 @@ function lootBrain(raw){
     return { text: rot(["Fair. The lair respects a clean no.", "Noted. The offer stays on the table."], convo.usedLine, 'no') };
   // actions
   if (has('tour', 'show me around'))
-    return { text: "Follow me. Ten stops, zero shortcuts.", act: function(){ startTour(); } };
+    return { text: "Follow me. Eleven stops, zero shortcuts.", act: function(){ startTour(); } };
   for (var ti = 0; ti < TRACKS.length; ti++){
     var tt = TRACKS[ti][1].toLowerCase(), tFirst = tt.split(' ')[0];
     if (m.indexOf(tt) >= 0 || (has('play') && tFirst.length > 4 && m.indexOf(tFirst) >= 0)){
@@ -1686,7 +1720,7 @@ function lootBrain(raw){
   if (has('show me', 'take me', 'go to', 'open the', 'visit', 'see the', 'where is', 'where are')){
     var dest = null, line = '';
     if (has('crown')) { dest = 'crowns'; line = "Up the grand stairs. Mind the throne."; }
-    else if (has('vault', 'gold', 'treasury')) { dest = 'token'; line = "The vault. The door is heavier than it looks."; }
+    else if (has('vault', 'gold', 'treasury')) { dest = 'vault'; line = "The vault. The door is heavier than it looks."; }
     else if (has('chess')) { dest = 'chess'; line = "The chess cabinet. Magnus still owes me a rematch."; }
     else if (has('arcade', 'arena', 'cabinet')) { dest = 'arena'; line = "The Arena cabinet. Home turf."; }
     else if (has('calendar', 'whiteboard', 'schedule', ' board')) { dest = 'calendar'; line = "The board. Nov 15 is the loud one."; }
@@ -1900,7 +1934,7 @@ window.__floorH = floorH;
 window.__routeTo = routeTo;
 window.__view = function(){ return viewMode; };
 window.__cycleView = cycleView;
-window.__cam = function(){ return { mode: viewMode, pos: camera.position.toArray(), fov: camera.fov, dist: camDist, vaultZoom: vaultZoom, inVault: inVault(lootPos.x, lootPos.z), lootVisible: loot.visible }; };
+window.__cam = function(){ return { mode: viewMode, pos: camera.position.toArray(), fov: camera.fov, dist: camDist, vaultZoom: vaultZoom, detours: detourCount, inVault: inVault(lootPos.x, lootPos.z), lootVisible: loot.visible }; };
 window.__setZoom = function(z){ vaultZoom = z; };
 
 // ---------- lights toggle ----------
@@ -1998,7 +2032,7 @@ function animate(){
       { station:'arena', key:'arena', dwell:9, line:'Quick round. For the culture.', line2:'Still undefeated in this room.' },
       { station:'chess', key:'chess', dwell:8, line:'Chess brain stays warm.', line2:'Magnus is out there somewhere. 2–0.', thought2:true },
       { station:'hlv', key:'hlv', dwell:8, line:'Checking the shelves. Quiet money.', line2:'Shelves talk, if you listen.', thought2:true },
-      { station:'token', key:'token', dwell:8, line:'Counting the treasury. Slowly.', line2:'All of it sleeps behind steel.', thought2:true },
+      { station:'token', key:'token', dwell:8, line:'Counting the treasury. Slowly.', line2:'Out front now. Better light for counting.', thought2:true },
       { station:'socials', key:'socials', dwell:9, line:'Recharging. Champion hours.', line2:'The feed can wait. It always waits.', thought2:true },
       { station:'music', key:'music', dwell:10, line:'Digging in my own crates.' },
       { station:'calendar', key:'calendar', dwell:7, line:'Nov 15. Circled three times.', line2:'Three defenses. One chess game. One day.' },
@@ -2020,7 +2054,7 @@ function animate(){
     if (dest2){ routeTo(dest2, null); idle.walking = actDef.key; idle.pendingAct = actDef; if (Math.random() < .4) say(THOUGHTS[(Math.random() * THOUGHTS.length) | 0], true); }
   }
   // smoothed velocity: eases in and out instead of snapping
-  var SPEED = 2.6, damp = 1 - Math.exp(-5.5 * dt);
+  var SPEED = 3.9, damp = 1 - Math.exp(-5.5 * dt);
   vel.x += (wish.x * SPEED - vel.x) * damp;
   vel.z += (wish.z * SPEED - vel.z) * damp;
   prevPos.set(lootPos.x, 0, lootPos.z);
@@ -2028,6 +2062,20 @@ function animate(){
   var spd = Math.hypot(vel.x, vel.z), moving = spd > .25;
   if (moving && SFX.ctx && !SFX.muted && nowMs > SFX.nextStep){ SFX.nextStep = nowMs + 330; SFX.stepAlt = 1 - SFX.stepAlt; blip(SFX.stepAlt ? 175 : 150, .05, .03, 'triangle'); }
   collide(lootPos);
+  // stuck rescue: walking but getting nowhere -> detour via the blocker's
+  // nearest free corner; after 3 detours, call it arrived so nothing hangs.
+  if (walkTarget && !panelOpen){
+    if (Math.hypot(lootPos.x - stuckPos.x, lootPos.z - stuckPos.z) > .35){ stuckPos.copy(lootPos); stuckT = 0; }
+    else if ((stuckT += dt) > 1.1){
+      stuckT = 0;
+      if (detourCount >= 3) forceArrive();
+      else {
+        var det = detourPoint();
+        if (det){ walkQueue.unshift(walkTarget); walkTarget = det; detourCount++; }
+        else forceArrive();
+      }
+    }
+  } else { stuckT = 0; stuckPos.copy(lootPos); if (!walkTarget) detourCount = 0; }
   lootH = floorH(lootPos.x, lootPos.z, lootH);
   bobT += dt * (moving ? 4 + spd * 1.7 : 2);
   loot.position.y = lootH + .95 + Math.abs(Math.sin(bobT)) * (moving ? .07 : .03) + idleBobY;
