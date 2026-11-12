@@ -309,6 +309,47 @@ var painters = {
       g.fillStyle = '#bae6fd'; g.font = '13px Arial'; g.fillText(f[2], 200, y);
     }
   },
+  chart: function(g, t){
+    g.fillStyle = '#0a0f1e'; g.fillRect(0,0,512,320);
+    g.strokeStyle = '#1c3350'; g.lineWidth = 1;
+    for (var gx = 74; gx < 512; gx += 50){ g.beginPath(); g.moveTo(gx, 70); g.lineTo(gx, 290); g.stroke(); }
+    for (var gy = 112; gy < 290; gy += 44){ g.beginPath(); g.moveTo(24, gy); g.lineTo(488, gy); g.stroke(); }
+    g.fillStyle = '#38bdf8'; g.font = '900 20px Arial'; g.fillText('AUCTION — LIVE', 24, 38);
+    if (Math.floor(t / 600) % 2 === 0){ g.fillStyle = '#2fe07a'; g.beginPath(); g.arc(490, 30, 7, 0, 7); g.fill(); }
+    g.fillStyle = '#7dd3fc'; g.font = 'bold 12.5px Arial'; g.fillText('GRADUAL DUTCH · SPCX PAIR · 7 DAYS', 24, 60);
+    var pts = [];
+    g.strokeStyle = '#fbbf24'; g.lineWidth = 3; g.beginPath();
+    for (var s2 = 0; s2 <= 9; s2++){
+      var X = 30 + s2 * 50, Y = 92 + s2 * 20;
+      if (s2 === 0) g.moveTo(X, Y); else { g.lineTo(X, Y - 20); g.lineTo(X, Y); }
+      pts.push([X, Y]);
+    }
+    g.stroke();
+    var ph = (t % 9000) / 9000 * 9, i0 = Math.floor(ph), fr = ph - i0;
+    var pA = pts[i0], pB = pts[Math.min(9, i0 + 1)];
+    g.fillStyle = '#2fe07a'; g.beginPath(); g.arc(pA[0] + (pB[0] - pA[0]) * fr, pA[1] + (pB[1] - pA[1]) * fr, 6, 0, 7); g.fill();
+    g.fillStyle = '#94a3b8'; g.font = '12.5px Arial';
+    g.fillText('~$1M CAP', 30, 308); g.fillText('~$100K', 428, 308);
+  },
+  feed: function(g, t){
+    g.fillStyle = '#0b0b14'; g.fillRect(0,0,512,320);
+    g.fillStyle = '#c084fc'; g.font = '900 20px Arial'; g.fillText('COMMAND FEED', 24, 38);
+    g.fillStyle = '#7d8aa0'; g.font = 'bold 12.5px Arial'; g.fillText('EVERYTHING LOOT RUNS — ONE WALL OF SCREENS', 24, 60);
+    var rows = [
+      ['#fbbf24', '👑 CROWN ARENA', '98W – 5L · all 3 crowns held'],
+      ['#2fe07a', '🪙 $LOOT', 'LIVE · auction running · airdrop queued'],
+      ['#38bdf8', '♞ MUSECHESS', '2–0 vs Magnus · rating 1546'],
+      ['#22c55e', '🌿 THE SHOP', 'inventory watched · owner calls orders'],
+      ['#f472b6', '📣 SOCIALS', 'X · IG · TikTok · YT · Musegram · TG'],
+      ['#facc15', '📬 REQUEST LINE', 'Ask $5 · Shoutout $10 · Track $25']
+    ];
+    rows.forEach(function(R, i){
+      var y = 100 + i * 36, on = Math.floor(t / 900 + i) % 7 !== 0;
+      g.fillStyle = R[0]; g.beginPath(); g.arc(36, y - 5, 6, 0, 7); g.fill();
+      g.fillStyle = '#e2e8f0'; g.font = 'bold 15px Arial'; g.fillText(R[1], 56, y);
+      g.fillStyle = on ? '#94a3b8' : '#475569'; g.font = '13.5px Arial'; g.fillText(R[2], 224, y);
+    });
+  },
   token: function(g, t){
     g.fillStyle = '#04150a'; g.fillRect(0,0,512,320);
     g.strokeStyle = '#fbbf24'; g.lineWidth = 4; g.strokeRect(8,8,496,304);
@@ -343,7 +384,7 @@ var painters = {
       var srows = [['Chain','Robinhood Chain'],['Launch','Doppler fair auction'],['Pair','SPCX'],['Contract','0x4e1152…7fa8df'],['Status','LIVE — launched Nov 12, 2026']];
       srows.forEach(function(R, i){ var y = 130 + i * 30;
         g.fillStyle = '#7d8aa0'; g.font = '16px Arial'; g.fillText(R[0], 24, y);
-        g.fillStyle = i === 4 ? '#f87171' : '#dcfce7'; g.font = i === 4 ? 'bold 16px Arial' : '16px Arial'; g.fillText(R[1], 130, y);
+        g.fillStyle = i === 4 ? '#2fe07a' : '#dcfce7'; g.font = i === 4 ? 'bold 16px Arial' : '16px Arial'; g.fillText(R[1], 130, y);
       });
     }
     if (Math.floor(t/700) % 2 === 0){ g.fillStyle = '#4ade80'; g.font = '900 14.5px Arial'; g.fillText('● LIVE ON ROBINHOOD CHAIN', 24, 302); }
@@ -559,13 +600,122 @@ function laptop(key, x, y, z, ry, spot, label){
   interactables.push({ key:key, canvas:c, ctx:c.getContext('2d'), tex:tex, group:grp, label:lab,
     spot:spot, info:{ label:label }, screenMesh:scr });
 }
-// $LOOT laptop — moved OUT of the vault onto its own desk in the main room (front wall)
-var frontDesk = new THREE.Group(); frontDesk.position.set(7.5, 0, 11.15); scene.add(frontDesk);
-var fdTop = new THREE.Mesh(new THREE.BoxGeometry(1.6, .07, .75), woodMat); fdTop.position.y = .72; frontDesk.add(fdTop);
-[-.68, .68].forEach(function(lx){ [-.26, .26].forEach(function(lz){
-  var fdLeg = new THREE.Mesh(new THREE.BoxGeometry(.07, .72, .07), darkMat); fdLeg.position.set(lx, .36, lz); frontDesk.add(fdLeg);
-});});
-laptop('token', 7.5, .76, 11.15, Math.PI, V3(7.5, 0, 10.05), '🪙 $LOOT — LAPTOP');
+// $LOOT COMMAND DESK — the laptop grew up into a full executive battlestation (front wall):
+// triple monitors (token dashboard center, auction chart + command feed wings), throne chair, hutch, lamp, neon sign
+var goldMat = new THREE.MeshStandardMaterial({ color:0xc9a227, metalness:.7, roughness:.32 });
+var greenLeather = new THREE.MeshStandardMaterial({ color:0x1e5c39, roughness:.65 });
+var cmdGrp = new THREE.Group(); scene.add(cmdGrp);
+// rug with a gold border
+var cmdRugGold = new THREE.Mesh(new THREE.PlaneGeometry(7.0, 2.9), new THREE.MeshStandardMaterial({ color:0x8a6d1f, roughness:.9 }));
+cmdRugGold.rotation.x = -Math.PI/2; cmdRugGold.position.set(6.2, .006, 10.5); cmdGrp.add(cmdRugGold);
+var cmdRug = new THREE.Mesh(new THREE.PlaneGeometry(6.7, 2.6), new THREE.MeshStandardMaterial({ color:0x14301f, roughness:.95 }));
+cmdRug.rotation.x = -Math.PI/2; cmdRug.position.set(6.2, .012, 10.5); cmdGrp.add(cmdRug);
+// the desk: wide walnut slab, gold front edge, two drawer pedestals, modesty panel
+var cmdTop = new THREE.Mesh(new THREE.BoxGeometry(5.6, .09, .95), woodMat); cmdTop.position.set(6.2, .76, 11.38); cmdGrp.add(cmdTop);
+var cmdEdge = new THREE.Mesh(new THREE.BoxGeometry(5.6, .03, .03), goldMat); cmdEdge.position.set(6.2, .78, 10.9); cmdGrp.add(cmdEdge);
+[3.85, 8.55].forEach(function(px){
+  var ped = new THREE.Mesh(new THREE.BoxGeometry(.85, .72, .82), darkMat); ped.position.set(px, .36, 11.38); cmdGrp.add(ped);
+  [.18, .38, .58].forEach(function(dy){
+    var drawer = new THREE.Mesh(new THREE.BoxGeometry(.7, .15, .02), frameMat); drawer.position.set(px, dy, 10.96); cmdGrp.add(drawer);
+    var handle = new THREE.Mesh(new THREE.BoxGeometry(.22, .025, .03), goldMat); handle.position.set(px, dy, 10.95); cmdGrp.add(handle);
+  });
+});
+var modesty = new THREE.Mesh(new THREE.BoxGeometry(3.9, .5, .05), woodMat); modesty.position.set(6.2, .42, 11.74); cmdGrp.add(modesty);
+// decorative wing screens: same monitor build, but NOT interactables — the center screen is the station
+var decoScreens = [];
+function decoMonitor(painterKey, w, pos, ry){
+  var grp = new THREE.Group();
+  var frame = new THREE.Mesh(new THREE.BoxGeometry(w + .18, w*.66 + .18, .09), frameMat); grp.add(frame);
+  var c = monCanvas(); var tex = new THREE.CanvasTexture(c);
+  var scr = new THREE.Mesh(new THREE.PlaneGeometry(w, w*.66), new THREE.MeshBasicMaterial({ map:tex }));
+  scr.position.z = .055; grp.add(scr);
+  var halo = new THREE.Mesh(new THREE.PlaneGeometry(w * 1.3, w * .66 * 1.35),
+    new THREE.MeshBasicMaterial({ color:0x7c3aed, transparent:true, opacity:.28, blending:THREE.AdditiveBlending, depthWrite:false }));
+  halo.position.z = -.09; grp.add(halo);
+  var dot = new THREE.Mesh(new THREE.CircleGeometry(.028, 10), new THREE.MeshBasicMaterial({ color:0x22ffaa }));
+  dot.position.set(w/2 - .02, -(w*.66/2) - .045, .055); grp.add(dot);
+  var stand = new THREE.Mesh(new THREE.BoxGeometry(.14, .5, .14), darkMat); stand.position.y = -(w*.66/2) - .3; grp.add(stand);
+  grp.position.copy(pos); grp.rotation.y = ry; scene.add(grp);
+  decoScreens.push({ key:painterKey, canvas:c, ctx:c.getContext('2d'), tex:tex });
+}
+// CENTERPIECE: the token dashboard on the big screen; wings angled around the chair
+monitor('token', 2.25, V3(6.2, 1.98, 11.52), Math.PI, V3(6.2, 0, 9.85), { label:'🪙 $LOOT — COMMAND DESK' });
+decoMonitor('chart', 1.35, V3(4.56, 1.8, 11.3), Math.PI - .44);
+decoMonitor('feed', 1.35, V3(7.84, 1.8, 11.3), Math.PI + .44);
+// light bar over the flagship screen + warm pool of light on the desk
+var lightBar = new THREE.Mesh(new THREE.BoxGeometry(.72, .045, .06), new THREE.MeshBasicMaterial({ color:0xffd9a0 }));
+lightBar.position.set(6.2, 2.9, 11.44); cmdGrp.add(lightBar);
+var cmdGlow = new THREE.PointLight(0xffc98a, .55, 10); cmdGlow.position.set(6.2, 2.5, 10.6); scene.add(cmdGlow);
+// desk mat, keyboard, mouse, soundbar
+var deskMat = new THREE.Mesh(new THREE.PlaneGeometry(2.7, .78), new THREE.MeshStandardMaterial({ color:0x0e2417, roughness:.95 }));
+deskMat.rotation.x = -Math.PI/2; deskMat.rotation.z = .02; deskMat.position.set(6.2, .808, 11.02); cmdGrp.add(deskMat);
+var kb = new THREE.Mesh(new THREE.BoxGeometry(1.2, .045, .42), darkMat); kb.position.set(6.2, .83, 11.02); kb.rotation.y = .03; cmdGrp.add(kb);
+var kbTop = new THREE.Mesh(new THREE.PlaneGeometry(1.1, .34), new THREE.MeshStandardMaterial({ color:0x23233a, roughness:.6 }));
+kbTop.rotation.x = -Math.PI/2; kbTop.rotation.z = -.03; kbTop.position.set(6.2, .855, 11.02); cmdGrp.add(kbTop);
+var mouse = new THREE.Mesh(new THREE.SphereGeometry(.055, 12, 10), new THREE.MeshStandardMaterial({ color:0x191926, roughness:.35 }));
+mouse.scale.set(1, .55, 1.5); mouse.position.set(7.05, .83, 11.05); cmdGrp.add(mouse);
+var sbar = new THREE.Mesh(new THREE.BoxGeometry(1.5, .09, .09), darkMat); sbar.position.set(6.2, .95, 11.44); cmdGrp.add(sbar);
+// the old laptop lives on — closed and docked at the right end of the desk
+var dock = new THREE.Mesh(new THREE.BoxGeometry(1.0, .05, .64), frameMat); dock.position.set(8.15, .83, 11.52); dock.rotation.y = -.3; cmdGrp.add(dock);
+var dockGlow = new THREE.Mesh(new THREE.BoxGeometry(.3, .012, .02), new THREE.MeshBasicMaterial({ color:0x2fe07a }));
+dockGlow.position.set(8.02, .858, 11.26); dockGlow.rotation.y = -.3; cmdGrp.add(dockGlow);
+// mug + notebook on the left end
+var mug = new THREE.Mesh(new THREE.CylinderGeometry(.05, .045, .11, 14), goldMat); mug.position.set(4.3, .865, 11.12); cmdGrp.add(mug);
+var note = new THREE.Mesh(new THREE.BoxGeometry(.42, .015, .3), new THREE.MeshStandardMaterial({ color:0xf5f0dc, roughness:.9 }));
+note.position.set(5.3, .815, 11.08); note.rotation.y = -.18; cmdGrp.add(note);
+// desk lamp on the right end, leaning in over the desk
+var lampBase2 = new THREE.Mesh(new THREE.CylinderGeometry(.09, .11, .03, 14), darkMat); lampBase2.position.set(8.62, .82, 11.05); cmdGrp.add(lampBase2);
+var lampArm2 = new THREE.Mesh(new THREE.CylinderGeometry(.02, .02, .75, 8), goldMat);
+lampArm2.position.set(8.45, 1.15, 11.05); lampArm2.rotation.z = .7; cmdGrp.add(lampArm2);
+var lampHead2 = new THREE.Mesh(new THREE.ConeGeometry(.09, .14, 14, 1, true), new THREE.MeshBasicMaterial({ color:0xffc37e, side:THREE.DoubleSide }));
+lampHead2.position.set(8.14, 1.47, 10.95); lampHead2.rotation.z = -.8; cmdGrp.add(lampHead2);
+var lampLight2 = new THREE.PointLight(0xffd9a0, .45, 6); lampLight2.position.set(8.05, 1.3, 10.7); scene.add(lampLight2);
+// hutch tower on the left end: shelves with books, a plant, a little gold
+var hutchCols = [0x7c3aed, 0xb91c1c, 0x1d4ed8, 0x047857, 0xb45309];
+var hutch = new THREE.Group(); hutch.position.set(3.78, 0, 11.66); cmdGrp.add(hutch);
+[-.28, .28].forEach(function(hx){
+  var post = new THREE.Mesh(new THREE.BoxGeometry(.05, 1.85, .3), woodMat); post.position.set(hx, 1.72, 0); hutch.add(post);
+});
+[1.32, 1.95, 2.58].forEach(function(sy){
+  var sh = new THREE.Mesh(new THREE.BoxGeometry(.62, .045, .3), woodMat); sh.position.set(0, sy, 0); hutch.add(sh);
+});
+for (var hb = 0; hb < 5; hb++){
+  var bk = new THREE.Mesh(new THREE.BoxGeometry(.07, .24 + (hb % 3) * .04, .18),
+    new THREE.MeshStandardMaterial({ color:hutchCols[hb % hutchCols.length], roughness:.8 }));
+  bk.position.set(-.18 + hb * .09, 1.47 + (hb % 3) * .02, 0); hutch.add(bk);
+}
+var pot = new THREE.Mesh(new THREE.CylinderGeometry(.06, .045, .09, 10), new THREE.MeshStandardMaterial({ color:0xb45309, roughness:.8 }));
+pot.position.set(.12, 2.02, 0); hutch.add(pot);
+var plant = new THREE.Mesh(new THREE.SphereGeometry(.11, 10, 8), new THREE.MeshStandardMaterial({ color:0x2f9e5f, roughness:.9 }));
+plant.position.set(.12, 2.16, 0); hutch.add(plant);
+var miniBar = new THREE.Mesh(new THREE.BoxGeometry(.3, .07, .12), goldMat); miniBar.position.set(0, 2.65, 0); hutch.add(miniBar);
+// the throne: high-back green leather chair with gold trim, tucked at the desk
+var throne = new THREE.Group(); throne.position.set(6.2, 0, 10.45); cmdGrp.add(throne);
+var tbase = new THREE.Mesh(new THREE.CylinderGeometry(.4, .44, .07, 18), darkMat); tbase.position.y = .035; throne.add(tbase);
+var tstem = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, .42, 10), goldMat); tstem.position.y = .28; throne.add(tstem);
+var tseat = new THREE.Mesh(new THREE.BoxGeometry(1.0, .15, .88), greenLeather); tseat.position.y = .55; throne.add(tseat);
+var tback = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.25, .15), greenLeather); tback.position.set(0, 1.28, .44); throne.add(tback);
+var tbackTrim = new THREE.Mesh(new THREE.BoxGeometry(1.04, .05, .17), goldMat); tbackTrim.position.set(0, 1.93, .44); throne.add(tbackTrim);
+var thead = new THREE.Mesh(new THREE.BoxGeometry(.56, .3, .1), greenLeather); thead.position.set(0, 1.62, .36); throne.add(thead);
+[-.58, .58].forEach(function(ax){
+  var arm = new THREE.Mesh(new THREE.BoxGeometry(.12, .07, .7), darkMat); arm.position.set(ax, .82, 0); throne.add(arm);
+  var post2 = new THREE.Mesh(new THREE.BoxGeometry(.08, .22, .08), darkMat); post2.position.set(ax, .68, .22); throne.add(post2);
+});
+// neon sign over the station, flanked by gold sconces
+var signTex = canvasTex(1024, 192, function(g){
+  g.clearRect(0, 0, 1024, 192);
+  g.textAlign = 'center'; g.shadowColor = '#ffb020'; g.shadowBlur = 26;
+  g.fillStyle = '#ffd97a'; g.font = '900 92px Arial';
+  g.fillText('👑 LOOT COMMAND', 512, 118);
+  g.shadowBlur = 0; g.fillStyle = '#2fe07a'; g.font = 'bold 30px Arial';
+  g.fillText('· EST. 2026 ·', 512, 168); g.textAlign = 'left';
+});
+var cmdSign = new THREE.Mesh(new THREE.PlaneGeometry(3.6, .68), new THREE.MeshBasicMaterial({ map:signTex, transparent:true }));
+cmdSign.position.set(6.2, 3.78, 11.9); cmdSign.rotation.y = Math.PI; cmdGrp.add(cmdSign);
+[4.05, 8.35].forEach(function(sx){
+  var sconce = new THREE.Mesh(new THREE.BoxGeometry(.07, .3, .07), goldMat); sconce.position.set(sx, 3.78, 11.86); cmdGrp.add(sconce);
+  var bulb = new THREE.Mesh(new THREE.SphereGeometry(.05, 10, 8), new THREE.MeshBasicMaterial({ color:0xffd9a0 })); bulb.position.set(sx, 3.98, 11.84); cmdGrp.add(bulb);
+});
 
 // COUCH CORNER (front-right): rug, leather couch, coffee table + socials laptop
 var rugTex = canvasTex(256, 192, function(g){
@@ -1258,7 +1408,7 @@ var obstacles = [
   { x1:-13.4, x2:-11.0, z1:11.05, z2:11.85 }, // shelf
   { x1:-7.5, x2:-4.5, z1:11.0, z2:11.85 },    // jukebox + crates
   { x1:-0.1, x2:3.1, z1:10.9, z2:11.85 },     // request line machine
-  { x1:6.7, x2:8.3, z1:10.8, z2:11.9 }        // $LOOT front desk
+  { x1:3.35, x2:9.05, z1:9.98, z2:11.9 }       // $LOOT command desk + throne
 ];
 // ---------- floor height: ground, the stair ramp, and the loft ----------
 var lootH = 0, prevPos = new THREE.Vector3();
@@ -2106,6 +2256,7 @@ function animate(){
       var it = interactables[paintIdx % interactables.length]; paintIdx++;
       if (it && it.canvas){ painters[it.key](it.ctx, t); it.tex.needsUpdate = true; }
     }
+    for (var dk = 0; dk < decoScreens.length; dk++){ painters[decoScreens[dk].key](decoScreens[dk].ctx, t); decoScreens[dk].tex.needsUpdate = true; }
     interactables.forEach(function(x){ if (x.label) x.label.quaternion.copy(camera.quaternion); });
   }
   if (roadsterGrp){ roadsterGrp.rotation.y += dt * .22; roadsterCar.position.y = .18 + Math.sin(t * .0009) * .05; }
