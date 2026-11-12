@@ -639,7 +639,7 @@ function decoMonitor(painterKey, w, pos, ry){
   decoScreens.push({ key:painterKey, canvas:c, ctx:c.getContext('2d'), tex:tex });
 }
 // CENTERPIECE: the token dashboard on the big screen; wings angled around the chair
-monitor('token', 2.25, V3(6.2, 1.98, 11.52), Math.PI, V3(6.2, 0, 9.85), { label:'🪙 $LOOT — COMMAND DESK' });
+monitor('token', 2.25, V3(6.2, 1.98, 11.52), Math.PI, V3(6.2, 0, 9.6), { label:'🪙 $LOOT — COMMAND DESK' });
 decoMonitor('chart', 1.35, V3(4.56, 1.8, 11.3), Math.PI - .44);
 decoMonitor('feed', 1.35, V3(7.84, 1.8, 11.3), Math.PI + .44);
 // light bar over the flagship screen + warm pool of light on the desk
@@ -690,7 +690,7 @@ var plant = new THREE.Mesh(new THREE.SphereGeometry(.11, 10, 8), new THREE.MeshS
 plant.position.set(.12, 2.16, 0); hutch.add(plant);
 var miniBar = new THREE.Mesh(new THREE.BoxGeometry(.3, .07, .12), goldMat); miniBar.position.set(0, 2.65, 0); hutch.add(miniBar);
 // the throne: high-back green leather chair with gold trim, tucked at the desk
-var throne = new THREE.Group(); throne.position.set(6.2, 0, 10.45); cmdGrp.add(throne);
+var throne = new THREE.Group(); throne.position.set(6.2, 0, 10.52); throne.rotation.y = Math.PI; cmdGrp.add(throne);
 var tbase = new THREE.Mesh(new THREE.CylinderGeometry(.4, .44, .07, 18), darkMat); tbase.position.y = .035; throne.add(tbase);
 var tstem = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, .42, 10), goldMat); tstem.position.y = .28; throne.add(tstem);
 var tseat = new THREE.Mesh(new THREE.BoxGeometry(1.0, .15, .88), greenLeather); tseat.position.y = .55; throne.add(tseat);
