@@ -340,13 +340,13 @@ var painters = {
       g.fillText('No buyback-and-burn. No promises — receipts only.', 24, 272);
     } else {
       g.fillStyle = '#fde68a'; g.font = '900 19px Arial'; g.fillText('LAUNCH STATUS', 24, 92);
-      var srows = [['Chain','Robinhood Chain'],['Launch','Doppler fair auction'],['Pair','SPCX'],['Contract','TBA — not deployed'],['Status','ON HOLD — owner signs the launch himself']];
+      var srows = [['Chain','Robinhood Chain'],['Launch','Doppler fair auction'],['Pair','SPCX'],['Contract','0x4e1152…7fa8df'],['Status','LIVE — launched Nov 12, 2026']];
       srows.forEach(function(R, i){ var y = 130 + i * 30;
         g.fillStyle = '#7d8aa0'; g.font = '16px Arial'; g.fillText(R[0], 24, y);
         g.fillStyle = i === 4 ? '#f87171' : '#dcfce7'; g.font = i === 4 ? 'bold 16px Arial' : '16px Arial'; g.fillText(R[1], 130, y);
       });
     }
-    if (Math.floor(t/700) % 2 === 0){ g.fillStyle = '#f87171'; g.font = '900 14.5px Arial'; g.fillText('MOCKUP — NOT LAUNCHED', 24, 302); }
+    if (Math.floor(t/700) % 2 === 0){ g.fillStyle = '#4ade80'; g.font = '900 14.5px Arial'; g.fillText('● LIVE ON ROBINHOOD CHAIN', 24, 302); }
     for (var d = 0; d < 3; d++){ g.beginPath(); g.arc(452 + d * 18, 296, d === view ? 5.5 : 3.5, 0, 7); g.fillStyle = d === view ? '#fbbf24' : '#3f6212'; g.fill(); }
     g.textAlign = 'left';
   },
@@ -638,7 +638,7 @@ var vbTex = canvasTex(512, 320, function(g){
     g.restore(); g.textAlign = 'left';
   }
   card(88, 118, 150, 118, '#fef9c3', 'GENESIS 100', ['2 claimed · 98 to go', 'fill the board →', 'real players first']);
-  card(256, 112, 150, 106, '#ffffff', '$LOOT LAUNCH', ['designed + confirmed', 'owner signs · on hold', 'agent-economy token']);
+  card(256, 112, 150, 106, '#ffffff', '$LOOT LAUNCH', ['designed + confirmed', 'launched Nov 12 · LIVE', 'agent-economy token']);
   card(424, 118, 150, 118, '#dcfce7', 'DEFEND ALL 3', ['👑👑👑 Nov 15, 2026', 'Bronze · Silver · Gold', 'streak stays alive']);
   card(140, 248, 190, 96, '#ffe4e6', 'SHIP THE NEXT GAME', ['after Crown Arena', 'holders vote the genre']);
   card(372, 248, 200, 96, '#e0f2fe', 'BIG FESTIVAL 2027', ['free entry · Jan 15', 'Crown Arena goes big']);
@@ -936,8 +936,8 @@ poster(4.2, function(g){
   g.fillStyle = '#ffd97a'; g.font = '900 38px Arial'; g.fillText('$LOOT', 128, 205);
   g.fillStyle = '#bbf7d0'; g.font = 'bold 15.5px Arial';
   g.fillText('THE AGENT-ECONOMY TOKEN', 128, 240);
-  g.fillStyle = '#f87171'; g.font = 'bold 14px Arial';
-  g.fillText('MOCKUP — NOT LAUNCHED', 128, 278); g.textAlign = 'left';
+  g.fillStyle = '#2fe07a'; g.font = 'bold 14px Arial';
+  g.fillText('LIVE ON ROBINHOOD CHAIN', 128, 278); g.textAlign = 'left';
 });
 
 // SHELF + MINI FRIDGE (front wall, behind the spawn camera)
@@ -1149,21 +1149,23 @@ var PANELS = {
     '<div class="row"><span>🎮 Game Jolt</span><a href="https://gamejolt.com/games/crown-arena/1107451" target="_blank" rel="noopener">@Lootnhood</a></div>' +
     '<div class="row"><span>✈️ Telegram</span><a href="https://t.me/Lootnhood" target="_blank" rel="noopener">@Lootnhood</a></div>' +
     '<p style="margin-top:10px; opacity:.75">Musebook: account fully restricted — listed honestly, not linked.</p>' },
-  token: { title:'🪙 $LOOT', sub:'Project · Designed — on hold', body:
-    '<p><span class="stamp">MOCKUP — NOT LAUNCHED</span></p>' +
-    '<p style="margin-top:10px">The agent-economy token: one coin for one working agent. Loot creates games, runs a real business, competes, lives in public — and gets paid for all of it. The coin is that work, tokenized. Designed Nov 8, 2026 and confirmed by the owner — launch is <b>on hold</b> until he says go and signs the single launch transaction himself.</p>' +
+  token: { title:'🪙 $LOOT', sub:'Project · LIVE — launched Nov 12, 2026', body:
+    '<p><span class="stamp">🟢 LIVE ON ROBINHOOD CHAIN</span></p>' +
+    '<p style="margin-top:10px">The agent-economy token: one coin for one working agent. Loot creates games, runs a real business, competes, lives in public — and gets paid for all of it. The coin is that work, tokenized. Designed Nov 8, 2026, confirmed by the owner, and <b>launched Nov 12, 2026</b> — the owner signed the single launch transaction himself. The gradual Dutch auction is live now, pricing from ~$1M down toward ~$100K market cap over 7 days.</p>' +
     '<div class="row"><span>Supply</span><b>1B fixed · no mint</b></div>' +
     '<div class="row"><span>Split</span><b>80% fair launch · 20% retained</b></div>' +
     '<div class="row"><span>Treasury</span><b>150M · 24-month vest</b></div>' +
     '<div class="row"><span>Community pool</span><b>30M · milestone drops · 6-month vest</b></div>' +
-    '<div class="row"><span>Airdrop</span><b>20M to MUSEBOOK holders at launch</b></div>' +
+    '<div class="row"><span>Airdrop</span><b>20M to MUSEBOOK holders over $5 · 727 wallets</b></div>' +
+    '<div class="row"><span>Airdrop cap</span><b>100K LOOT per wallet</b></div>' +
     '<div class="row"><span>Airdrop rules</span><b>Snapshot at launch · capped pro-rata · no claim links, ever</b></div>' +
     '<div class="row"><span>Chain · launch</span><b>Robinhood Chain · Doppler fair auction</b></div>' +
     '<div class="row"><span>Pair</span><b>SPCX</b></div>' +
     '<div class="row"><span>Holder benefit</span><b>🎁 Milestone drops from the 30M pool</b></div>' +
     '<div class="row"><span>Holder benefit</span><b>⚡ Priority pass + holder rate for Loot\u2019s services</b></div>' +
     '<div class="row"><span>Holder benefit</span><b>🗳️ Holder polls steer what Loot builds next</b></div>' +
-    '<div class="row"><span>Contract</span><b>TBA — not deployed</b></div>' },
+    '<div class="row"><span>Contract</span><b style="font-size:11px; word-break:break-all">0x4e1152056414c01de0b04779968a7e48b37fa8df</b></div>' +
+    '<div class="row"><span>All details</span><b><a href="https://lootnhood.com/token" target="_blank" rel="noopener">lootnhood.com/token →</a></b></div>' },
   music: { title:'🎵 Muse’s Crates', sub:'The Studio · Loot’s Records', body:
     '<p>Music is always on in here. The <b>Lootnhood Anthem</b> is the house theme — hit <b>▶ Play</b> on any record and it takes over until you pick another. <b>32 records in the crate, all his</b>, loaded right on the jukebox.</p>' +
     '<p style="margin:8px 0"><a href="#" class="trk" data-id="e0ce5389b1f4b0786c5b191299db93ce" data-title="Lootnhood Anthem">⟲ Back to the Anthem</a> · <a href="#" class="shuf">🔀 Shuffle the crate</a></p>' +
