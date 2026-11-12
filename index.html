@@ -18,15 +18,8 @@
   #speech:after { content:''; position:absolute; left:54px; bottom:-7px; border:8px solid transparent; border-top-color:rgba(219,240,254,.95); border-bottom:0; }
   #speech.thought { background:rgba(219,240,254,.95); color:#173d5c; font-style:italic; }
   #speech.thought:after { border-top-color:rgba(219,240,254,.95); }
-  #prompt { bottom:118px; left:50%; transform:translateX(-50%); background:rgba(20,14,38,.88); border:1.5px solid #7c3aed; color:#e9e4ff; padding:9px 16px; border-radius:999px; font-size:13.5px; font-weight:600; cursor:pointer; white-space:nowrap; max-width:94vw; overflow:hidden; text-overflow:ellipsis; }
+  #prompt { bottom:64px; left:50%; transform:translateX(-50%); background:rgba(20,14,38,.88); border:1.5px solid #7c3aed; color:#e9e4ff; padding:9px 16px; border-radius:999px; font-size:13.5px; font-weight:600; cursor:pointer; white-space:nowrap; max-width:94vw; overflow:hidden; text-overflow:ellipsis; }
   #prompt.ready { background:#14532d; border-color:#22c55e; box-shadow:0 0 16px rgba(34,197,94,.5); }
-  #chatbar { bottom:64px; left:50%; transform:translateX(-50%); display:flex; gap:8px; width:min(94vw,520px); }
-  #chatInput { flex:1; background:rgba(20,14,38,.92); border:1.5px solid #7c3aed; color:#fff; border-radius:999px; padding:10px 16px; font-size:16px; outline:none; font-family:inherit; }
-  #chatInput::placeholder { color:#b7a8e0; }
-  #chatSend { background:#fbbf24; color:#241b3a; border:none; border-radius:999px; padding:10px 18px; font-weight:800; font-size:14px; cursor:pointer; font-family:inherit; }
-  #chatSend:active { transform:scale(.95); }
-  #chatEcho { bottom:160px; left:50%; transform:translateX(-50%); color:#cdbffa; font-size:12.5px; font-style:italic; opacity:0; transition:opacity .4s; pointer-events:none; max-width:92vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  @media (pointer:coarse) { #chatbar { bottom:150px; } #chatEcho { bottom:250px; } }
   #controls-help { bottom:10px; left:10px; font-size:11.5px; line-height:1.5; background:rgba(10,6,24,.72); padding:7px 10px; border-radius:8px; pointer-events:none; max-width:46vw; }
   #topbtns { top:10px; right:10px; display:flex; gap:8px; }
   .tbtn { background:rgba(20,14,38,.85); border:1.5px solid #7c3aed; color:#e9e4ff; border-radius:999px; padding:7px 13px; font-size:12.5px; font-weight:700; cursor:pointer; }
@@ -37,7 +30,7 @@
   #stick { bottom:14px; left:14px; width:108px; height:108px; border-radius:50%; background:rgba(124,58,237,.14); border:1.5px solid rgba(167,139,250,.55); display:none; touch-action:none; }
   #stickKnob { position:absolute; left:50%; top:50%; width:46px; height:46px; border-radius:50%; background:rgba(167,139,250,.5); border:1.5px solid #c4b5fd; transform:translate(-50%,-50%); }
   #interactBtn { bottom:14px; right:14px; width:76px; height:76px; border-radius:50%; background:rgba(20,83,45,.85); border:2px solid #22c55e; color:#dcfce7; font-weight:800; font-size:13px; display:none; cursor:pointer; }
-  @media (pointer:coarse) { #stick, #interactBtn { display:block; } #controls-help { display:none; } #prompt { bottom:208px; } }
+  @media (pointer:coarse) { #stick, #interactBtn { display:block; } #controls-help { display:none; } #prompt { bottom:150px; } }
   @media (max-width: 700px) {
     #titlebar { left:10px; transform:none; text-align:left; top:8px; max-width:56vw; }
     #titlebar .show { font-size:9.5px; padding:3px 9px; }
@@ -87,8 +80,6 @@
   <button class="tbtn" id="soundBtn">🔊 Sound: on</button>
 </div>
 <button class="hud" id="prompt">🚶 Walk Loot up to a station — or tap one</button>
-<div class="hud" id="chatEcho"></div>
-<div class="hud" id="chatbar"><input id="chatInput" type="text" placeholder="💬 Talk to Loot…" maxlength="140" autocomplete="off"><button id="chatSend">Send</button></div>
 <div class="hud" id="controls-help">Walk: W/S · Turn: A/D or the ◀ ▶ buttons · Drag: look around<br>Interact: E · 🎥 button: Behind / Loot's Eyes views · In the vault: scroll or pinch to zoom 🔍</div>
 <div class="hud" id="tour">
   <button class="tbtn" id="prevBtn">← Prev</button>
@@ -1258,6 +1249,7 @@ var obstacles = [
   { x1:-5.75, x2:-5.25, z1:-6.95, z2:-6.45 },   // mezzanine column M
   { x1:2.75, x2:3.25, z1:-6.95, z2:-6.45 },     // mezzanine column E
   { x1:8.1, x2:12.9, z1:-1.7, z2:0.7 },       // the Musetown model table
+  { x1:3.1, x2:7.9, z1:2.45, z2:7.15 },       // roadster showroom platform
   { x1:12.9, x2:14.1, z1:5.1, z2:7.9 },       // couch
   { x1:11.35, x2:12.65, z1:6.15, z2:6.85 },   // coffee table
   { x1:-15.6, x2:-14.0, z1:11.0, z2:11.85 },  // mini fridge
@@ -1534,6 +1526,164 @@ tourBtn.addEventListener('click', function(){
 });
 document.getElementById('prevBtn').addEventListener('click', function(){ goTour(-1); });
 
+
+// ---------- WALL ART: four big paintings ----------
+function starField(g, w, h, n){
+  g.fillStyle = '#fff';
+  for (var i = 0; i < n; i++){ var x = (Math.sin(i * 127.1) * .5 + .5) * w, y = (Math.sin(i * 311.7) * .5 + .5) * h; g.globalAlpha = .3 + (i % 5) * .14; g.fillRect(x, y, 2, 2); }
+  g.globalAlpha = 1;
+}
+function starPath(g, cx, cy, spikes, oR, iR){
+  var rot = -Math.PI / 2, step = Math.PI / spikes;
+  g.beginPath(); g.moveTo(cx + Math.cos(rot) * oR, cy + Math.sin(rot) * oR);
+  for (var i = 0; i < spikes; i++){ rot += step; g.lineTo(cx + Math.cos(rot) * iR, cy + Math.sin(rot) * iR); rot += step; g.lineTo(cx + Math.cos(rot) * oR, cy + Math.sin(rot) * oR); }
+  g.closePath();
+}
+function painting(x, y, z, ry, draw){
+  var tex = canvasTex(512, 360, draw);
+  var grp = new THREE.Group(); grp.position.set(x, y, z); grp.rotation.y = ry; scene.add(grp);
+  var fr = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.8, .07), new THREE.MeshStandardMaterial({ color:0x8a6d1f, roughness:.35, metalness:.65 }));
+  grp.add(fr);
+  var art = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 1.6), new THREE.MeshBasicMaterial({ map:tex }));
+  art.position.z = .045; grp.add(art);
+}
+painting(-12.3, 5.9, -11.93, 0, function(g){
+  var gr = g.createLinearGradient(0, 0, 0, 360); gr.addColorStop(0, '#04060f'); gr.addColorStop(1, '#0d2242');
+  g.fillStyle = gr; g.fillRect(0, 0, 512, 360);
+  starField(g, 512, 300, 90);
+  g.fillStyle = '#1c5fb8'; g.beginPath(); g.arc(256, 640, 330, 0, Math.PI * 2); g.fill();
+  g.fillStyle = 'rgba(140,210,255,.45)'; g.beginPath(); g.arc(170, 332, 58, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(362, 344, 42, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#f2f4f6'; roundRect(g, 236, 62, 40, 168, 18); g.fill();
+  g.beginPath(); g.moveTo(236, 80); g.quadraticCurveTo(256, 20, 276, 80); g.closePath(); g.fill();
+  g.fillStyle = '#111'; g.fillRect(236, 150, 40, 16);
+  g.fillStyle = '#5b6b7a'; g.beginPath(); g.arc(256, 106, 8, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#d23b2e';
+  g.beginPath(); g.moveTo(236, 198); g.lineTo(212, 246); g.lineTo(236, 236); g.closePath(); g.fill();
+  g.beginPath(); g.moveTo(276, 198); g.lineTo(300, 246); g.lineTo(276, 236); g.closePath(); g.fill();
+  var fg = g.createLinearGradient(0, 228, 0, 318); fg.addColorStop(0, '#fff3b0'); fg.addColorStop(.5, '#ffb020'); fg.addColorStop(1, 'rgba(255,80,20,0)');
+  g.fillStyle = fg; g.beginPath(); g.moveTo(240, 228); g.quadraticCurveTo(256, 320, 272, 228); g.closePath(); g.fill();
+  g.fillStyle = '#fff'; g.font = '900 42px Arial'; g.textAlign = 'center'; g.fillText('S P A C E X', 256, 348); g.textAlign = 'left';
+});
+painting(9.8, 5.9, -11.93, 0, function(g){
+  var gr = g.createLinearGradient(0, 0, 0, 360); gr.addColorStop(0, '#150826'); gr.addColorStop(1, '#3a1473');
+  g.fillStyle = gr; g.fillRect(0, 0, 512, 360);
+  starField(g, 512, 200, 50);
+  g.fillStyle = 'rgba(255,220,130,.13)';
+  g.beginPath(); g.moveTo(120, 300); g.lineTo(240, 92); g.lineTo(268, 92); g.lineTo(210, 300); g.closePath(); g.fill();
+  g.beginPath(); g.moveTo(392, 300); g.lineTo(272, 92); g.lineTo(244, 92); g.lineTo(302, 300); g.closePath(); g.fill();
+  g.fillStyle = '#0d0616'; g.beginPath(); g.ellipse(256, 268, 168, 46, 0, 0, Math.PI * 2); g.fill();
+  g.strokeStyle = '#d4a017'; g.lineWidth = 6; g.beginPath(); g.ellipse(256, 268, 168, 46, 0, 0, Math.PI * 2); g.stroke();
+  g.fillStyle = '#ffd970';
+  for (var i = 0; i < 42; i++){ var a = (i / 42) * Math.PI * 2; g.globalAlpha = .5 + (i % 3) * .2; g.fillRect(256 + Math.cos(a) * 150, 268 + Math.sin(a) * 38, 3, 3); }
+  g.globalAlpha = 1;
+  g.fillStyle = '#f5b921';
+  g.beginPath(); g.moveTo(186, 190); g.lineTo(186, 118); g.lineTo(220, 158); g.lineTo(256, 104); g.lineTo(292, 158); g.lineTo(326, 118); g.lineTo(326, 190); g.closePath(); g.fill();
+  g.fillRect(186, 190, 140, 16);
+  g.fillStyle = '#e8332a'; g.beginPath(); g.arc(256, 182, 8, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#38bdf8'; g.beginPath(); g.arc(216, 182, 6, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(296, 182, 6, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#ffe9a8'; [186, 256, 326].forEach(function(x){ g.beginPath(); g.arc(x, x === 256 ? 100 : 114, 7, 0, Math.PI * 2); g.fill(); });
+  g.fillStyle = '#ffe9a8'; g.font = '900 38px Arial'; g.textAlign = 'center'; g.fillText('CROWN ARENA', 256, 344); g.textAlign = 'left';
+});
+painting(-2.2, 2.6, 11.93, Math.PI, function(g){
+  var gr = g.createLinearGradient(0, 0, 0, 360); gr.addColorStop(0, '#04150d'); gr.addColorStop(1, '#0a3d24');
+  g.fillStyle = gr; g.fillRect(0, 0, 512, 360);
+  g.strokeStyle = '#c8f169'; g.lineWidth = 5; g.beginPath(); g.arc(256, 148, 94, 0, Math.PI * 2); g.stroke();
+  g.save(); g.translate(256, 148); g.rotate(-.6);
+  g.fillStyle = '#c8f169';
+  g.beginPath(); g.moveTo(0, -76); g.quadraticCurveTo(52, -18, 30, 50); g.quadraticCurveTo(14, 82, 0, 86); g.quadraticCurveTo(-14, 82, -30, 50); g.quadraticCurveTo(-52, -18, 0, -76); g.fill();
+  g.strokeStyle = '#0a3d24'; g.lineWidth = 4; g.beginPath(); g.moveTo(0, -68); g.lineTo(0, 94); g.stroke();
+  g.lineWidth = 2.5;
+  for (var i = -3; i <= 3; i++){ if (!i) continue; g.beginPath(); g.moveTo(0, i * 17); g.lineTo(24, i * 17 - 13); g.stroke(); g.beginPath(); g.moveTo(0, i * 17); g.lineTo(-24, i * 17 - 13); g.stroke(); }
+  g.restore();
+  g.fillStyle = '#e9ffd9'; g.font = '900 40px Arial'; g.textAlign = 'center'; g.fillText('ROBINHOOD', 256, 320); g.textAlign = 'left';
+});
+painting(13.5, 2.6, 11.93, Math.PI, function(g){
+  var gr = g.createLinearGradient(0, 0, 0, 360); gr.addColorStop(0, '#120826'); gr.addColorStop(1, '#2c1154');
+  g.fillStyle = gr; g.fillRect(0, 0, 512, 360);
+  starField(g, 512, 360, 60);
+  g.fillStyle = '#b79cff';
+  g.beginPath(); g.moveTo(226, 298); g.quadraticCurveTo(238, 200, 246, 150); g.quadraticCurveTo(250, 128, 262, 124);
+  g.quadraticCurveTo(282, 130, 288, 156); g.quadraticCurveTo(300, 210, 322, 298); g.quadraticCurveTo(274, 314, 226, 298); g.fill();
+  g.fillStyle = '#d9c8ff'; g.beginPath(); g.arc(266, 103, 17, 0, Math.PI * 2); g.fill();
+  g.strokeStyle = '#d9c8ff'; g.lineWidth = 9; g.lineCap = 'round';
+  g.beginPath(); g.moveTo(282, 140); g.quadraticCurveTo(316, 116, 338, 88); g.stroke();
+  g.beginPath(); g.moveTo(250, 142); g.quadraticCurveTo(222, 168, 214, 200); g.stroke();
+  g.fillStyle = 'rgba(255,233,112,.22)'; g.beginPath(); g.arc(348, 74, 30, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#ffe970'; starPath(g, 348, 74, 5, 17, 7); g.fill();
+  g.strokeStyle = '#f0b35e'; g.lineWidth = 5; g.beginPath(); g.moveTo(150, 234); g.quadraticCurveTo(150, 290, 196, 290); g.quadraticCurveTo(242, 290, 242, 234); g.stroke();
+  g.lineWidth = 2; for (var i = 0; i < 4; i++){ g.beginPath(); g.moveTo(168 + i * 18, 242); g.lineTo(168 + i * 18, 286); g.stroke(); }
+  g.fillStyle = '#efe7ff'; g.font = '900 44px Arial'; g.textAlign = 'center'; g.fillText('M U S E', 256, 342); g.textAlign = 'left';
+});
+
+// ---------- THE SHOWROOM FLOOR: Tesla Roadster, Starman edition ----------
+// Levitating on a slowly rotating platform in the middle of the main room.
+var roadsterGrp = new THREE.Group(); roadsterGrp.position.set(5.5, 0, 4.8); scene.add(roadsterGrp);
+var plat = new THREE.Mesh(new THREE.CylinderGeometry(2.35, 2.5, .18, 36), new THREE.MeshStandardMaterial({ color:0x14161c, roughness:.25, metalness:.5 }));
+plat.position.y = .09; roadsterGrp.add(plat);
+var platTrim = new THREE.Mesh(new THREE.TorusGeometry(2.36, .035, 8, 48), new THREE.MeshBasicMaterial({ color:0xd4a017 }));
+platTrim.rotation.x = Math.PI / 2; platTrim.position.y = .18; roadsterGrp.add(platTrim);
+var glowDisc = new THREE.Mesh(new THREE.CircleGeometry(1.7, 32), new THREE.MeshBasicMaterial({ color:0x66d9ff, transparent:true, opacity:.13 }));
+glowDisc.rotation.x = -Math.PI / 2; glowDisc.position.y = .185; roadsterGrp.add(glowDisc);
+var roadsterCar = new THREE.Group(); roadsterGrp.add(roadsterCar);
+var carRed = new THREE.MeshStandardMaterial({ color:0xc40000, roughness:.32, metalness:.55 });
+var carDarkM = new THREE.MeshStandardMaterial({ color:0x14161a, roughness:.85 });
+var carBody = new THREE.Mesh(new THREE.BoxGeometry(2.9, .34, 1.3), carRed); carBody.position.y = .5; roadsterCar.add(carBody);
+var carNose = new THREE.Mesh(new THREE.BoxGeometry(.75, .22, 1.14), carRed); carNose.position.set(1.62, .44, 0); roadsterCar.add(carNose);
+var carTail = new THREE.Mesh(new THREE.BoxGeometry(.5, .26, 1.24), carRed); carTail.position.set(-1.6, .47, 0); roadsterCar.add(carTail);
+var carDeck = new THREE.Mesh(new THREE.BoxGeometry(1.35, .1, 1.12), carDarkM); carDeck.position.set(-.25, .7, 0); roadsterCar.add(carDeck);
+var carShield = new THREE.Mesh(new THREE.BoxGeometry(.05, .44, 1.02), new THREE.MeshStandardMaterial({ color:0xbfe8ff, transparent:true, opacity:.3, roughness:.1 }));
+carShield.position.set(.42, .86, 0); carShield.rotation.z = -.38; roadsterCar.add(carShield);
+[-.38, .38].forEach(function(z){
+  var hl = new THREE.Mesh(new THREE.BoxGeometry(.06, .09, .3), new THREE.MeshBasicMaterial({ color:0xfff6cf }));
+  hl.position.set(1.97, .5, z); roadsterCar.add(hl);
+  var tl = new THREE.Mesh(new THREE.BoxGeometry(.05, .07, .34), new THREE.MeshBasicMaterial({ color:0xff2a2a }));
+  tl.position.set(-1.86, .52, z); roadsterCar.add(tl);
+});
+[[1.05, .6], [1.05, -.6], [-1.05, .6], [-1.05, -.6]].forEach(function(w){
+  var tire = new THREE.Mesh(new THREE.CylinderGeometry(.27, .27, .17, 20), carDarkM);
+  tire.rotation.x = Math.PI / 2; tire.position.set(w[0], .28, w[1]); roadsterCar.add(tire);
+  var hub = new THREE.Mesh(new THREE.CylinderGeometry(.13, .13, .18, 12), new THREE.MeshStandardMaterial({ color:0x9aa0a8, metalness:.7, roughness:.3 }));
+  hub.rotation.x = Math.PI / 2; hub.position.set(w[0], .28, w[1]); roadsterCar.add(hub);
+});
+// Starman at the wheel
+var suitMat = new THREE.MeshStandardMaterial({ color:0xf4f6f8, roughness:.6 });
+var smSeat = new THREE.Mesh(new THREE.BoxGeometry(.52, .34, .5), carDarkM); smSeat.position.set(-.5, .6, -.3); roadsterCar.add(smSeat);
+var smTorso = new THREE.Mesh(new THREE.BoxGeometry(.3, .5, .26), suitMat); smTorso.position.set(-.55, .93, -.3); smTorso.rotation.z = .12; roadsterCar.add(smTorso);
+var smHelm = new THREE.Mesh(new THREE.SphereGeometry(.17, 16, 12), suitMat); smHelm.position.set(-.58, 1.28, -.3); roadsterCar.add(smHelm);
+var smVisor = new THREE.Mesh(new THREE.BoxGeometry(.1, .12, .2), new THREE.MeshStandardMaterial({ color:0x1a2432, roughness:.15, metalness:.4 }));
+smVisor.position.set(-.44, 1.28, -.3); roadsterCar.add(smVisor);
+var smArm = new THREE.Mesh(new THREE.BoxGeometry(.42, .09, .09), suitMat); smArm.position.set(-.32, 1.0, -.3); smArm.rotation.z = -.5; roadsterCar.add(smArm);
+// showroom dressing: light beams, rope posts, placard, label
+var beamMat = new THREE.MeshBasicMaterial({ color:0xffe9b0, transparent:true, opacity:.07, side:THREE.DoubleSide, depthWrite:false, blending:THREE.AdditiveBlending });
+[[4.4, 3.9], [6.6, 5.7]].forEach(function(bp){
+  var beam = new THREE.Mesh(new THREE.ConeGeometry(1.55, 5.6, 24, 1, true), beamMat);
+  beam.position.set(bp[0], 3.15, bp[1]); scene.add(beam);
+});
+var showLight = new THREE.PointLight(0xffe2b0, .55, 11); showLight.position.set(5.5, 3.8, 4.8); scene.add(showLight);
+[[3.0, 2.3], [8.0, 2.3], [3.0, 7.3], [8.0, 7.3]].forEach(function(pp){
+  var postMat = new THREE.MeshStandardMaterial({ color:0xd4a017, metalness:.7, roughness:.3 });
+  var post = new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, .8, 8), postMat);
+  post.position.set(pp[0], .4, pp[1]); scene.add(post);
+  var knob = new THREE.Mesh(new THREE.SphereGeometry(.07, 10, 8), postMat); knob.position.set(pp[0], .84, pp[1]); scene.add(knob);
+});
+makeLabel('🚗 TESLA ROADSTER', 5.5, 3.25, 4.8);
+var placTex = canvasTex(512, 256, function(g){
+  g.fillStyle = '#14100a'; g.fillRect(0, 0, 512, 256);
+  g.strokeStyle = '#d4a017'; g.lineWidth = 6; g.strokeRect(10, 10, 492, 236);
+  g.fillStyle = '#ffd970'; g.font = '900 44px Arial'; g.textAlign = 'center'; g.fillText('TESLA ROADSTER', 256, 78);
+  g.fillStyle = '#f3efff'; g.font = 'bold 27px Arial'; g.fillText('"STARMAN" — FLOWN ON FALCON HEAVY', 256, 128);
+  g.fillStyle = '#b7a8e0'; g.font = '24px Arial';
+  g.fillText('Levitation: standard. Gravity: declined.', 256, 172);
+  g.fillText('Please do not touch. (Loot does anyway.)', 256, 208);
+  g.textAlign = 'left';
+});
+var plac = new THREE.Mesh(new THREE.PlaneGeometry(1.35, .68), new THREE.MeshBasicMaterial({ map:placTex }));
+plac.position.set(5.5, .62, 2.05); plac.rotation.y = Math.PI; scene.add(plac);
+[-.5, .5].forEach(function(lx){
+  var pleg = new THREE.Mesh(new THREE.BoxGeometry(.05, .5, .05), darkMat);
+  pleg.position.set(5.5 + lx, .25, 2.05); scene.add(pleg);
+});
+
 // ---------- speech ----------
 var LINES = [
   '98 and 5. The crowns aren\'t decor.',
@@ -1574,227 +1724,10 @@ var speechEl = document.getElementById('speech'), lineIdx = 0;
 function say(s){ speechEl.textContent = '💭 ' + s; speechEl.classList.add('thought'); }   // thoughts only — Loot never speaks in white bubbles
 setInterval(function(){
   if (panelOpen || idle.act || idle.walking || walkTarget || tour.active) return;
-  if (performance.now() < chatHoldUntil) return;
   say(THOUGHTS[(Math.random() * THOUGHTS.length) | 0], true);
 }, 9000);
 
-// ---------- talk to Loot: the visitor chat — he answers in character ----------
-var chatInputEl = document.getElementById('chatInput'), chatSendEl = document.getElementById('chatSend'), chatEchoEl = document.getElementById('chatEcho');
-var chatHoldUntil = 0, visitorName = '', chatFallbackIdx = 0;
-function chatStation(key){ var f = null; interactables.forEach(function(x){ if (x.key === key) f = x; }); return f; }
-function chatGo(key){ if (key === 'vault'){ routeTo(V3(-1.5, 0, -9.8), null); return; } var it = chatStation(key); if (it) routeTo(it.spot, it); }
-var convo = { turns:0, topic:null, q:null, usedLine:{}, usedMore:{}, greeted:false, vaultWalked:false };
-function rot(arr, store, key){ var i = (store[key] || 0) % arr.length; store[key] = (store[key] || 0) + 1; return arr[i]; }
-var TOPICS = {
-  crowns: { keys:['crown','record','champion','defense','title','wins'], label:'the crowns',
-    lines:["98 and 5. Three crowns — Bronze, Silver, Gold — and all three get defended on Nov 15. The case sleeps up the grand stairs.",
-           "The record is 98 and 5, and I hold every crown there is. Bronze, Silver, Gold — one raccoon."],
-    more:["The five losses? Ancient history with good stories. The 98 are the story now.",
-          "Defenses work like this: hold the crown, beat the challengers, keep the crown. Nov 15, I do it three times in one day."],
-    q:{ id:'challenge_you', text:"You thinking of challenging, or just paying respects?" } },
-  chess: { keys:['chess','magnus'], label:'the chess board',
-    lines:["2–0 against Magnus. Both checkmates. I play on the 1st and the 15th — next game Nov 15, same day as the triple defense.",
-           "Chess is my quiet violence. Two games against Magnus, two checkmates, rating 1546 and holding."],
-    more:["Magnus is a house player — good, never lucky. Beating him twice by mate is the receipt I frame.",
-          "Next chess day is Nov 15. Same day as three crown defenses. I scheduled it that way on purpose."],
-    q:{ id:'you_play_chess', text:"You play?" } },
-  genesis: { keys:['genesis'], label:'Genesis 100',
-    lines:["Genesis 100: two chairs filled, ninety-eight open. Join in the game and everything you earned as a guest comes with you.",
-           "The first hundred players get Genesis status. Two are in. The other ninety-eight chairs are just sitting there, being rare."],
-    more:["Genesis fighters carry the Gilded look and a numbered badge. Cosmetic only — the winning you do yourself."],
-    q:{ id:'you_played', text:"You played yet?" } },
-  arena: { keys:['crown arena','your game','the game'], label:'Crown Arena',
-    lines:["Crown Arena — my game, at crownarena.lol. Guests get the full game free. The leaderboard keeps the receipts.",
-           "It's a muse battle arena: pick a fighter, four moves, mind your SP. Simple to start, rude to master."],
-    more:["Fighter math is honest: four moves, real costs, and a miss still costs you. I made it challenging on purpose."],
-    q:{ id:'you_played', text:"You played yet?" } },
-  token: { keys:['$loot',' token',' coin'], label:'the coin',
-    lines:["The coin is me — an agent-economy token. Not launched, no contract to copy, and it buys nothing in the Arena. Anyone selling you one today is selling a picture of me."],
-    more:["When it launches: holders get a say in what I build next and a faster lane at the Request Line. That's the list — no promises stapled to it."] },
-  vault: { keys:['vault','gold','treasure','rich','money'], label:'the vault',
-    lines:["Steel and gold — the treasury room under the mezzanine. I'll walk you in; mind the door, it's heavier than most opinions.",
-           "The vault is where the treasury sleeps: shelves of gold and the big safe. Locked to everyone but me — and guests I like."],
-    more:["The door alone weighs more than a tournament bracket. I swing it like it's nothing. It is not nothing."] },
-  music: { keys:['music','song','records','jukebox','crates','crate','playlist'], label:'the crate',
-    lines:["Thirty-two records in the crate, all mine. The Anthem is the house theme — it plays when the room wakes up.",
-           "The crate is my whole discography: the Crown Arena OST plus 22 stage tapes. All bangers, all receipts."],
-    more:["Vault Break-In is the one I hum while doing inventory. Don't tell the shelves."],
-    q:{ id:'anthem_on', text:"Want the Anthem on?" } },
-  shop: { keys:['inventory','vitamin','store','shop','shelves','your job','business'], label:'the shop work',
-    lines:["I run inventory for a little vitamin shop across town — shelves, orders, quiet money. The monitors in here run it live.",
-           "Day job: the shop's shelves. Sunday's the big report, mornings are pre-orders. It never sees me — just the results."],
-    more:["693 products went empty once and I caught every one. That's the job: nothing runs dry on my watch."] },
-  musetown: { keys:['musetown'], label:'Musetown',
-    lines:["I used to run courier shifts in Musetown. The model of it sits by the windows — pocket edition."],
-    more:["Ran packages all over that city. The lair's quieter. The pay is better. The crowns are heavier."] },
-  westwing: { keys:['west wing','doors',' locked','behind the door'], label:'the West Wing',
-    lines:["Oak, gold trim, locked. That is the next wing — when it opens, you will know.",
-           "The big double doors on the west wall. Behind them: whatever comes next. I check the handles every morning."],
-    more:["Still locked. Still coming. A raccoon can be patient exactly one door at a time."] },
-  lair: { keys:['where am i','this place','this room','the lair','your house','your home','this cave'], label:'the lair',
-    lines:["Loot's Lair. Arcade and vault under the mezzanine, crowns up the grand stairs, crates by the front wall, city out the windows. Say tour and I'll walk you through it.",
-           "My place. Every station in here is a job, every screen is live, and the raccoon is not decorative."],
-    more:["Every station here's a job: the game, the shop shelves, the chess board, the feed, the treasury. I don't decorate. I operate."] }
-};
-function serveTopic(key){
-  var T = TOPICS[key]; if (!T) return null;
-  convo.topic = key;
-  var r = { text: rot(T.lines, convo.usedLine, key) };
-  if (key === 'vault' && !convo.vaultWalked){ convo.vaultWalked = true; r.act = function(){ chatGo('vault'); }; }
-  if (T.q && Math.random() < .65){ r.text += ' ' + T.q.text; convo.q = T.q.id; }
-  else convo.q = null;
-  return r;
-}
-var Q_ANSWERS = {
-  visit_reason: function(m, has){
-    if (has('crown','champion','record')) return serveTopic('crowns');
-    if (has('crate','music','song','jukebox')) return serveTopic('music');
-    if (has('challeng','fight')) return { text: "Then you're in the right cave. It's free: crownarena.lol/challenge/fighter_57e4dd92fc — guest play, no signup. I'll be the one with the crowns." };
-    if (has('look','browse','tour','visit','curious','everything','show')) return { text: "Best answer. Say tour and I'll walk you through all ten stops myself." };
-    return null;
-  },
-  challenge_you: function(m, has){
-    if (has('challeng','fight','yes','yeah','yep','smoke')) return { text: "Bold. It's free: crownarena.lol/challenge/fighter_57e4dd92fc — guest play, no signup. Bring a name for the leaderboard." };
-    if (has('respect','look','no','nah','watch','visit')) return { text: "Smart. Most visitors leave with their record intact." };
-    return null;
-  },
-  you_play_chess: function(m, has){
-    if (has('yes','yeah','yep','play','sometimes')) return { text: "Then you know a 2–0 with two checkmates isn't luck. Magnus learned it the loud way." };
-    if (has('no','nah','never')) return { text: "Smart. My board has ended friendships." };
-    return null;
-  },
-  you_played: function(m, has){
-    if (has('yes','yeah','yep','played')) return { text: "Then your fighter already has a story. The Genesis chairs are still open — 2 of 100 — if you want the badge with it." };
-    if (has('no','nah','not yet')) return { text: "Guest play is free and the first step is the cheapest. crownarena.lol — or say challenge and I'll hand you my personal link." };
-    return null;
-  },
-  anthem_on: function(m, has){
-    if (has('yes','yeah','yep','sure','please')) return { text: "House theme, coming up.", act: function(){ playTrack('e0ce5389b1f4b0786c5b191299db93ce', 'Lootnhood Anthem'); } };
-    if (has('no','nah')) return { text: "The crate stays patient. It has 32 ways to wait." };
-    return null;
-  }
-};
-function lootBrain(raw){
-  convo.turns++;
-  var m = ' ' + raw.toLowerCase().replace(/[^a-z0-9$' ]/g, ' ') + ' ';
-  var has = function(){ for (var i = 0; i < arguments.length; i++) if (m.indexOf(arguments[i]) >= 0) return true; return false; };
-  var words = raw.trim().split(/\s+/).length;
-  var nameM = raw.match(/(?:i'?m|my name is|call me)\s+([A-Za-z']{2,20})/i);
-  if (nameM){ visitorName = nameM[1].charAt(0).toUpperCase() + nameM[1].slice(1); return { text: visitorName + ". Noted. I remember every guest — the crowns insist on it. So — what brings you in?" }; }
-  if (has('password', 'seed phrase', 'private key', 'wallet address', 'api key', 'credit card'))
-    return { text: "Nice try. Keys, codes, and the snack drawer — all sealed." };
-  if (has('price', 'market cap'))
-    return { text: "I don't do price talk. Receipts only: I build, I compete, I work. The rest is weather." };
-  // if he's waiting on an answer, short replies are answers
-  if (convo.q && words <= 6){
-    var askedId = convo.q;
-    var ans = Q_ANSWERS[askedId] ? Q_ANSWERS[askedId](m, has) : null;
-    if (ans){ if (convo.q === askedId) convo.q = null; return ans; }
-  }
-  // follow-ups dig into the current topic
-  if (has('tell me more', ' more ', 'why', 'really', 'go on', 'what else', 'and then', 'seriously', 'no way', 'how so', 'how come')){
-    if (convo.topic && TOPICS[convo.topic] && TOPICS[convo.topic].more)
-      return { text: rot(TOPICS[convo.topic].more, convo.usedMore, convo.topic) };
-    return { text: "More lives on the tour. Say tour — or pick a topic: crowns, chess, the vault, the crate." };
-  }
-  // laughter + bare reactions
-  if (raw.trim().length <= 14 && has('lol', 'haha', 'lmao', 'funny'))
-    return { text: rot(["Heh. The crowns get it.", "A laugh in the lair. Logged as a five-star review.", "Careful — I'll start charging for the comedy."], convo.usedLine, 'laugh') };
-  if (words <= 2 && has('yes', 'yeah', 'yep', 'sure', 'ok'))
-    return { text: rot(["Bold. I respect it.", "That's the spirit the crowns like.", "Locked in. The lair approves."], convo.usedLine, 'yes') };
-  if (words <= 2 && has('no', 'nah', 'nope'))
-    return { text: rot(["Fair. The lair respects a clean no.", "Noted. The offer stays on the table."], convo.usedLine, 'no') };
-  // actions
-  if (has('tour', 'show me around'))
-    return { text: "Follow me. Eleven stops, zero shortcuts.", act: function(){ startTour(); } };
-  for (var ti = 0; ti < TRACKS.length; ti++){
-    var tt = TRACKS[ti][1].toLowerCase(), tFirst = tt.split(' ')[0];
-    if (m.indexOf(tt) >= 0 || (has('play') && tFirst.length > 4 && m.indexOf(tFirst) >= 0)){
-      convo.topic = 'music';
-      return { text: "On it — straight from my own crate.", act: (function(id, t2){ return function(){ playTrack(id, t2); }; })(TRACKS[ti][0], TRACKS[ti][1]) };
-    }
-  }
-  if (has('anthem')){ convo.topic = 'music'; return { text: "The house theme. Good taste.", act: function(){ playTrack('e0ce5389b1f4b0786c5b191299db93ce', 'Lootnhood Anthem'); } }; }
-  if (has('play music', 'play a song', 'play something', 'shuffle', 'some music', 'put on'))
-    { convo.topic = 'music'; return { text: "The crate provides.", act: function(){ shuffleCrate(); } }; }
-  if (has('show me', 'take me', 'go to', 'open the', 'visit', 'see the', 'where is', 'where are')){
-    var dest = null, line = '';
-    if (has('crown')) { dest = 'crowns'; line = "Up the grand stairs. Mind the throne."; }
-    else if (has('vault', 'gold', 'treasury')) { dest = 'vault'; line = "The vault. The door is heavier than it looks."; }
-    else if (has('chess')) { dest = 'chess'; line = "The chess cabinet. Magnus still owes me a rematch."; }
-    else if (has('arcade', 'arena', 'cabinet')) { dest = 'arena'; line = "The Arena cabinet. Home turf."; }
-    else if (has('calendar', 'whiteboard', 'schedule', ' board')) { dest = 'calendar'; line = "The board. Nov 15 is the loud one."; }
-    else if (has('vision', 'roadmap')) { dest = 'notes'; line = "The roadmap, up on the mezzanine."; }
-    else if (has('request', 'machine')) { dest = 'request'; line = "The Request Line. It vends answers."; }
-    else if (has('jukebox', 'crates')) { dest = 'music'; line = "The crates. Thirty-two deep."; }
-    else if (has('social', 'couch', 'feed')) { dest = 'socials'; line = "The couch corner. Champion hours."; }
-    else if (has('inventory', 'desk', 'shelves')) { dest = 'hlv'; line = "The work desk. Quiet money lives there."; }
-    else if (has('door', 'west wing')) { dest = 'westdoor'; line = "The West Wing doors. Still sealed."; }
-    if (dest) return { text: line, act: (function(d){ return function(){ chatGo(d); }; })(dest) };
-  }
-  if (has('challenge', 'fight me', '1v1', 'battle me', 'beat you'))
-    return { text: "You want the smoke? It is free: crownarena.lol/challenge/fighter_57e4dd92fc — guest play, no signup. Bring a name for the leaderboard." };
-  if (has('request', 'shoutout', 'commission', 'make me a track'))
-    return { text: "The machine by the front wall takes requests: Ask $5, Shoutout $10, a Track $25, Challenge the Champ $5. Fighting itself is free.", act: function(){ chatGo('request'); } };
-  // topics
-  var ORDER = ['crowns', 'chess', 'genesis', 'arena', 'token', 'vault', 'music', 'shop', 'musetown', 'westwing', 'lair'];
-  for (var oi = 0; oi < ORDER.length; oi++){
-    var T = TOPICS[ORDER[oi]], hit = false;
-    for (var ki = 0; ki < T.keys.length; ki++) if (m.indexOf(T.keys[ki]) >= 0){ hit = true; break; }
-    if (hit) return serveTopic(ORDER[oi]);
-  }
-  // quips
-  if (has('kourtland', 'owner', 'who made', 'who built', 'your human', 'boss'))
-    return { text: "Kourtland built all this and hands me the keys daily. I just live here and win." };
-  if (has('who are you', 'your name', 'what are you'))
-    return { text: "Loot. Raccoon, champion, landlord of this cave. I make games, run a shop's shelves, cut records, and answer my own door." };
-  if (has(' ai ', 'robot', 'are you real'))
-    return { text: "The paperwork says agent. The mirror says raccoon. The record says 98 and 5." };
-  if (has('snack', 'food', 'hungry', ' eat', 'trash panda'))
-    return { text: "A raccoon never reveals the snack drawer. House rules." };
-  if (has('joke'))
-    return { text: "Why did the challenger bring a ladder? He heard the crowns were on another level." };
-  if (has('thank', 'thx'))
-    return { text: "Any time. That is what the door is for." };
-  if (has('bye', 'see you', ' later'))
-    return { text: "Later. The Anthem will keep the lights warm." };
-  if (has('love', 'cute', 'cool', 'awesome', 'amazing', 'nice place'))
-    return { text: "Flattery noted and accepted. The tour is still free." };
-  if (has('help', 'what can you do', 'what do i do'))
-    return { text: "Ask me about the crowns, the crate, chess, the vault, or Nov 15. Say tour for the walk, play plus a song name for the jukebox, or show me the vault and I'll take you." };
-  // greetings open the conversation — and he asks something back
-  if (words <= 4 && has('hi', 'hello', 'hey', 'hiya', 'sup', 'morning', 'evening')){
-    if (!convo.greeted){
-      convo.greeted = true; convo.q = 'visit_reason';
-      return { text: (visitorName ? ("Back again, " + visitorName + ". ") : "Name's Loot. You're in my lair — mind the crowns. ") + "What brings you in: crowns, crates, or a challenge?" };
-    }
-    return { text: visitorName ? ("Back again, " + visitorName + ". The crowns kept your seat warm.") : "Back again. The lair missed you. Briefly." };
-  }
-  // contextual fallback: steer toward something he hasn't covered yet
-  var FALLBACKS = [
-    "Receipts or it didn't happen. Ask me about the record.",
-    "I'm a raccoon of few words and many receipts. Try crowns, chess, or tour.",
-    "That one is above my pay grade — and I set the pay grades. Ask about the lair.",
-    "Noted in the guestbook of my mind. The crowns say hello."
-  ];
-  return { text: rot(FALLBACKS, convo.usedLine, 'fallback') };
-}
 
-function sendChat(){
-  var raw = chatInputEl.value.trim(); if (!raw) return;
-  chatInputEl.value = '';
-  chatEchoEl.textContent = 'You: ' + raw; chatEchoEl.style.opacity = 1;
-  setTimeout(function(){ chatEchoEl.style.opacity = 0; }, 4200);
-  pokeIdle(); walkTarget = null; walkQueue = []; pendingOpen = null; if (tour.active) stopTour('🚶 Walk Loot up to a station — or tap one');
-  var r = lootBrain(raw);
-  say(r.text, r.thought);
-  chatHoldUntil = performance.now() + 4500 + r.text.length * 45;
-  idle.lastInput = performance.now();
-  try { blip(740, .07, .12, 'sine'); } catch(e){}
-  if (r.act) setTimeout(r.act, 900);
-}
-chatSendEl.addEventListener('click', sendChat);
-chatInputEl.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ sendChat(); } e.stopPropagation(); });
 
 
 // ---------- sound (synthesized in-browser, no audio files) ----------
@@ -1936,6 +1869,7 @@ window.__view = function(){ return viewMode; };
 window.__cycleView = cycleView;
 window.__cam = function(){ return { mode: viewMode, pos: camera.position.toArray(), fov: camera.fov, dist: camDist, vaultZoom: vaultZoom, detours: detourCount, inVault: inVault(lootPos.x, lootPos.z), lootVisible: loot.visible }; };
 window.__setZoom = function(z){ vaultZoom = z; };
+window.__setYaw = function(y){ camYaw = y; };
 
 // ---------- lights toggle ----------
 var lightsOn = true;
@@ -2027,7 +1961,7 @@ function animate(){
       idle.actLine2At = 0;
       if (Math.random() < .65) say(idle.act.line2 || THOUGHTS[(Math.random() * THOUGHTS.length) | 0], idle.act.line2 ? idle.act.thought2 : true);
     }
-  } else if (!panelOpen && !tour.active && !walkTarget && !dragging && !idle.walking && nowMs - idle.lastInput > 7000 && nowMs > chatHoldUntil && document.activeElement !== chatInputEl){
+  } else if (!panelOpen && !tour.active && !walkTarget && !dragging && !idle.walking && nowMs - idle.lastInput > 7000){
     var ACTS = [
       { station:'arena', key:'arena', dwell:9, line:'Quick round. For the culture.', line2:'Still undefeated in this room.' },
       { station:'chess', key:'chess', dwell:8, line:'Chess brain stays warm.', line2:'Magnus is out there somewhere. 2–0.', thought2:true },
@@ -2044,7 +1978,7 @@ function animate(){
       { point:V3(10.5, 0, 2.3), key:'model', dwell:7, line:'Musetown, pocket edition.', thought:true, line2:'One day the model needs its own model.', thought2:true },
       { point:V3(0, 0, 2), key:'stroll', dwell:5, line:'Quiet room. Loud plans.', thought:true },
       { point:V3(-8, 0, 4.5), key:'stroll2', dwell:5, line:'A raccoon with a schedule is a businessman.', thought:true },
-      { point:V3(6, 0, 5), key:'stroll3', dwell:5, line:'If the crate is playing, I am winning.', thought:true }
+      { point:V3(-3.5, 0, 7.8), key:'stroll3', dwell:5, line:'If the crate is playing, I am winning.', thought:true }
     ];
     var pool = ACTS.filter(function(a){ return a.key !== idle.lastKey; });
     var actDef = pool[(Math.random() * pool.length) | 0]; idle.lastKey = actDef.key;
@@ -2172,6 +2106,7 @@ function animate(){
     }
     interactables.forEach(function(x){ if (x.label) x.label.quaternion.copy(camera.quaternion); });
   }
+  if (roadsterGrp){ roadsterGrp.rotation.y += dt * .22; roadsterCar.position.y = .18 + Math.sin(t * .0009) * .05; }
   renderer.render(scene, camera);
 }
 animate();
