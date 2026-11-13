@@ -292,12 +292,32 @@
     h2{font-size:27px;line-height:1.12}
   }
   @media (prefers-reduced-motion: reduce){ .ticker-track{animation:none} }
+  /* ===== chrome/safari mobile format pass ===== */
+  .ribbon-m{display:none}
+  .buybar{-webkit-backdrop-filter:blur(8px)}
+  @keyframes coinfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .hero-art .coin{animation:coinfloat 5s ease-in-out infinite}
+  @media (max-width:920px){
+    .ribbon{display:none}
+    .ribbon-m{display:block;background:var(--gold);color:#231a00;font-weight:700;font-size:13px;padding:0 16px;border:none;border-radius:0;box-shadow:none}
+    .ribbon-m summary{display:block;text-align:center;font-size:13px;font-weight:700;padding:9px 0;cursor:pointer;list-style:none}
+    .ribbon-m summary:after{content:""}
+    .ribbon-m[open ] summary:after{content:""}
+    .ribbon-m .live-b{background:#231a00;color:var(--gold-bright);padding:1px 8px;border-radius:99px;font-size:11px;letter-spacing:.08em;margin-right:6px}
+    .ribbon-m .ribbon-m-body{font-weight:600;text-align:left;padding:2px 0 12px;line-height:1.5}
+    .hero-grid > div:first-child{display:flex;flex-direction:column}
+    .hero-stats{order:6}
+    .hero-cta{order:5;margin:16px 0 4px}
+  }
+  @media (max-width:620px){ .hero-art{max-width:330px} }
+  @media (prefers-reduced-motion: reduce){ .hero-art .coin{animation:none} }
 section[id]{scroll-margin-top:86px}
 </style>
 </head>
 <body>
 
 <div class="ribbon"><b>LIVE</b> $LOOT relaunched clean on Robinhood Chain — contract <span class="mono">0xE337789DF504417d9ED4413DA97471f7Ea8604B0</span>. The first contract was retired the same day (see below) — do not buy it. Always verify the address on this page before trading; lookalikes are not $LOOT. Other tokens share the LOOT ticker on this chain — mine has <b>no trade tax</b> and pays <b>no dividends</b>; if a page promises those, it is a different token.</div>
+<details class="ribbon-m"><summary><span class="live-b">LIVE</span>$LOOT relaunched clean · Contract <span class="mono">0xE337…604B0</span> · <u>full warning</u> ▾</summary><div class="ribbon-m-body">$LOOT relaunched clean on Robinhood Chain — contract <span class="mono">0xE337789DF504417d9ED4413DA97471f7Ea8604B0</span>. The first contract was retired the same day — do not buy it. Always verify the address on this page before trading; lookalikes are not $LOOT. Other tokens share the LOOT ticker on this chain — mine has <b>no trade tax</b> and pays <b>no dividends</b>; if a page promises those, it is a different token.</div></details>
 <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>🟢 <b>$LOOT LIVE</b> ON ROBINHOOD CHAIN</span><span>👑 PAIRED WITH <b>SPCX</b> — SPACEX'S STOCK TOKEN</span><span>🎁 20M AIRDROP <b>DELIVERED</b> — 727/727 WALLETS</span><span>⚠️ NO TRADE TAX · NO DIVIDENDS · ALWAYS VERIFY THE CONTRACT</span><span>🏆 98W–5L · ALL THREE CROWNS HELD</span><span>🟢 <b>$LOOT LIVE</b> ON ROBINHOOD CHAIN</span><span>👑 PAIRED WITH <b>SPCX</b> — SPACEX'S STOCK TOKEN</span><span>🎁 20M AIRDROP <b>DELIVERED</b> — 727/727 WALLETS</span><span>⚠️ NO TRADE TAX · NO DIVIDENDS · ALWAYS VERIFY THE CONTRACT</span><span>🏆 98W–5L · ALL THREE CROWNS HELD</span></div></div>
 
 <header class="nav">
