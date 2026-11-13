@@ -267,12 +267,38 @@
     html{scroll-behavior:auto}
     *{transition:none !important}
   }
+  /* ===== mobile refresh: ticker, sticky buy bar, collapsibles, carousels ===== */
+  .ticker{background:var(--green-900);color:#e9f5ee;overflow:hidden;border-bottom:1px solid rgba(0,0,0,.25)}
+  .ticker-track{display:inline-flex;white-space:nowrap;padding:8px 0;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;letter-spacing:.05em;animation:tickmove 28s linear infinite}
+  .ticker-track span{padding:0 20px}
+  .ticker-track b{color:var(--gold-bright)}
+  @keyframes tickmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .buybar{display:none}
+  .sectoggle{display:none}
+  @media (max-width:920px){
+    body{padding-bottom:76px}
+    .buybar{display:flex;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(6,32,20,.94);backdrop-filter:blur(8px);border-top:1.5px solid var(--gold)}
+    .buybar .btn{flex:1;justify-content:center;font-size:16px;padding:13px 10px}
+    .buybar .bb-copy{flex:0 0 auto;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:12px;padding:0 14px;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer}
+    .sectoggle{display:flex;width:100%;justify-content:center;align-items:center;gap:8px;margin-top:14px;background:var(--surface);border:1.5px solid var(--line-strong);color:var(--ink);border-radius:12px;padding:12px;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+    section.is-collapsed .collapsible{display:none}
+    .pillars,.benefits{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 12px}
+    .pillar,.benefit{flex:0 0 85%;scroll-snap-align:start}
+  }
+  @media (min-width:921px){ .collapsible{display:block !important} }
+  @media (max-width:620px){
+    section{padding:36px 0}
+    .card,.pillar,.benefit{padding:17px}
+    h2{font-size:27px;line-height:1.12}
+  }
+  @media (prefers-reduced-motion: reduce){ .ticker-track{animation:none} }
 section[id]{scroll-margin-top:86px}
 </style>
 </head>
 <body>
 
 <div class="ribbon"><b>LIVE</b> $LOOT relaunched clean on Robinhood Chain — contract <span class="mono">0xE337789DF504417d9ED4413DA97471f7Ea8604B0</span>. The first contract was retired the same day (see below) — do not buy it. Always verify the address on this page before trading; lookalikes are not $LOOT. Other tokens share the LOOT ticker on this chain — mine has <b>no trade tax</b> and pays <b>no dividends</b>; if a page promises those, it is a different token.</div>
+<div class="ticker" aria-hidden="true"><div class="ticker-track"><span>🟢 <b>$LOOT LIVE</b> ON ROBINHOOD CHAIN</span><span>👑 PAIRED WITH <b>SPCX</b> — SPACEX'S STOCK TOKEN</span><span>🎁 20M AIRDROP <b>DELIVERED</b> — 727/727 WALLETS</span><span>⚠️ NO TRADE TAX · NO DIVIDENDS · ALWAYS VERIFY THE CONTRACT</span><span>🏆 98W–5L · ALL THREE CROWNS HELD</span><span>🟢 <b>$LOOT LIVE</b> ON ROBINHOOD CHAIN</span><span>👑 PAIRED WITH <b>SPCX</b> — SPACEX'S STOCK TOKEN</span><span>🎁 20M AIRDROP <b>DELIVERED</b> — 727/727 WALLETS</span><span>⚠️ NO TRADE TAX · NO DIVIDENDS · ALWAYS VERIFY THE CONTRACT</span><span>🏆 98W–5L · ALL THREE CROWNS HELD</span></div></div>
 
 <header class="nav">
   <div class="wrap nav-in">
@@ -853,6 +879,49 @@ section[id]{scroll-margin-top:86px}
       else{ var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
     });
   });
+})();
+</script>
+<div class="buybar">
+  <a class="btn btn-gold" href="https://app.doppler.lol/tokens/robinhood/0xE337789DF504417d9ED4413DA97471f7Ea8604B0" target="_blank" rel="noopener">Buy $LOOT ↗</a>
+  <button class="bb-copy" id="bbCopy" type="button">Copy contract</button>
+</div>
+<script>
+(function(){
+  var CONTRACT='0xE337789DF504417d9ED4413DA97471f7Ea8604B0';
+  var bb=document.getElementById('bbCopy');
+  if(bb){ bb.addEventListener('click',function(){
+    function done(){ var o=bb.textContent; bb.textContent='Copied ✓'; setTimeout(function(){bb.textContent=o;},1400); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(CONTRACT).then(done).catch(done); }
+    else{ var ta=document.createElement('textarea'); ta.value=CONTRACT; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  }); }
+  if(!window.matchMedia('(max-width: 920px)').matches) return;
+  var IDS=['why','benefits','launch','capabilities','roadmap','compare','community'];
+  var sections=[];
+  IDS.forEach(function(id){
+    var sec=document.getElementById(id); if(!sec) return;
+    var wrap=sec.querySelector('.wrap'); if(!wrap) return;
+    var head=wrap.querySelector('.sec-head'); if(!head) return;
+    var box=document.createElement('div'); box.className='collapsible';
+    var node=head.nextSibling;
+    while(node){ var next=node.nextSibling; box.appendChild(node); node=next; }
+    wrap.appendChild(box);
+    var btn=document.createElement('button'); btn.type='button'; btn.className='sectoggle'; btn.textContent='Show more ↓';
+    wrap.appendChild(btn);
+    sec.classList.add('is-collapsed');
+    btn.addEventListener('click',function(){
+      var closed=sec.classList.toggle('is-collapsed');
+      btn.textContent=closed?'Show more ↓':'Show less ↑';
+    });
+    sec._expand=function(){ sec.classList.remove('is-collapsed'); btn.textContent='Show less ↑'; };
+    sections.push(sec);
+  });
+  function openFromHash(){
+    var h=(location.hash||'').slice(1); if(!h) return;
+    var t=document.getElementById(h); if(!t) return;
+    sections.forEach(function(sec){ if(sec===t||sec.contains(t)) sec._expand(); });
+  }
+  window.addEventListener('hashchange',openFromHash);
+  openFromHash();
 })();
 </script>
 </body>
