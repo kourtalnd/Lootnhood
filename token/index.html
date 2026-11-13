@@ -311,6 +311,11 @@
   }
   @media (max-width:620px){ .hero-art{max-width:330px} }
   @media (prefers-reduced-motion: reduce){ .hero-art .coin{animation:none} }
+  /* ===== width fix: unbroken contract addresses must never stretch the page ===== */
+  .mono,.addr{overflow-wrap:anywhere}
+  .step,.steps > *,.pillars > *,.benefits > *,.tok-grid > *,.hero-grid > *{min-width:0}
+  .step p,.step h3{overflow-wrap:break-word}
+  .contractbar .v{overflow-wrap:anywhere}
   /* ===== cashcat-style format: numbered sections, tile-stacked tables ===== */
   body{counter-reset:secnum}
   section .sec-head .label:before{counter-increment:secnum;content:counter(secnum,decimal-leading-zero) " — "}
