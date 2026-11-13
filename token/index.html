@@ -311,6 +311,16 @@
   }
   @media (max-width:620px){ .hero-art{max-width:330px} }
   @media (prefers-reduced-motion: reduce){ .hero-art .coin{animation:none} }
+  /* ===== cashcat-style format: numbered sections, tile-stacked tables ===== */
+  body{counter-reset:secnum}
+  section .sec-head .label:before{counter-increment:secnum;content:counter(secnum,decimal-leading-zero) " — "}
+  @media (max-width:620px){
+    .tok table,.tok tbody,.tok tr,.tok td{display:block;width:100%}
+    .tok thead{display:none}
+    .tok tr{padding:10px 2px;border-bottom:1px solid var(--line)}
+    .tok td{border-bottom:none;padding:2px 0}
+    .tok td:first-child{font-weight:800;font-size:15.5px}
+  }
 section[id]{scroll-margin-top:86px}
 </style>
 </head>
