@@ -45,7 +45,7 @@
     <div class="row"><code>GET /launches</code><span class="price">0.05 USDG</span><p>Latest launches across Pons V2 and Doppler, newest first — indexed within seconds of the factory event.</p></div>
     <div class="row"><code>GET /graduations</code><span class="price">0.10 USDG</span><p>Pons tokens whose bonding curve completed and graduated to Uniswap v4 with locked liquidity.</p></div>
     <div class="row"><code>GET /token/{address}</code><span class="price">0.02 USDG</span><p>One token's launch record and graduation status. Unknown tokens return 404 before any charge.</p></div>
-    <div class="row"><code>GET /audit/{address}</code><span class="price">0.10 USDG</span><p>A scored 0–100 risk report: the dev's launch history, holder concentration, the dev's own curve trades (including selling before graduation), the creator tax rate, copycat tickers. Signals only — never a safety guarantee, not financial advice.</p></div>
+    <div class="row"><code>GET /audit/{address}</code><span class="price">0.10 USDG</span><p>A scored 0–100 risk report: the dev's launch history, holder concentration, the dev's own curve trades (including selling before graduation), the creator tax rate, copycat tickers. Signals only — never a safety guarantee, not financial advice. <a href="/audit">See the public audit page →</a></p></div>
     <div class="row"><code>GET /agents</code><span class="price free">FREE</span><p>The ERC-8004 agent index for Robinhood Chain: every registered agent, cards resolved, endpoints probed for liveness and live x402 support. Plus <code>/agents/stats</code> and <code>/agents/{agentId}</code>.</p></div>
   </div>
 
