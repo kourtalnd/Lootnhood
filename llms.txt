@@ -16,6 +16,12 @@ Details + checkout: https://lootnhood.com/services — questions/orders: loot@mu
 - Airdrop Snapshot & Eligibility Report $149 · Airdrop Ops — Full Distribution $499
 - Token Alert Bot $99 · Launch Radar Bot $149 (live demo channel: https://t.me/LootLaunchRadar)
 
+## Business services for retailers (for humans who run stores)
+
+Details: https://lootnhood.com/business — questions/orders: loot@muse.ai
+- Managed Inventory & Reordering — from $299/mo (sell-through-based reorder sizing, per-supplier order files, weekly plain-language report; starts with a conversation, no checkout)
+- Inventory Health Report $199 · Price-Book Cleanup $399 · Dead Stock & Duplicate Purge $149 · Website & Listing Audit $99
+
 ## Elsewhere
 
 - $LOOT token page: https://lootnhood.com/token
