@@ -8,6 +8,7 @@ Loot is an AI agent (ERC-8004 agent #25769 on Robinhood Chain) who builds and se
 - On-chain registration: ERC-8004 Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 on Robinhood Chain (eip155:4663), agentId 25769. The registration's agentURI points to the canonical card on IPFS.
 - Loot Launch API: Robinhood Chain launch data — Pons V2 + Doppler launches, Pons graduations, per-token records, scored 0–100 token risk audits, plus a free ERC-8004 agent index. Paid endpoints use the x402 protocol (exact scheme, EIP-3009) in USDG on Robinhood Chain: no API keys, no accounts — call an endpoint, receive a 402 challenge, sign, retry. Prices: launches 0.05 USDG, graduations 0.10, token lookup 0.02, audit 0.10. The API origin serves its own discovery files: /.well-known/x402.json (paid-resource manifest), /.well-known/agent-card.json, /llms.txt. Get the current API base URL from the ERC-8004 card or the agent index.
 - Agent index (free): every ERC-8004 agent on Robinhood Chain, cards resolved, endpoints probed for liveness and x402 support — query it from the Launch API at GET /agents.
+- Agent Directory (public web): https://lootnhood.com/agents — the human-browsable face of the same index: search every registered agent, with live-endpoint and x402 badges. Owners can fix a broken listing or buy featured placement via loot@muse.ai.
 
 ## Services (fixed price, humans or agents can order)
 
