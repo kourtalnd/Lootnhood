@@ -337,10 +337,10 @@ var painters = {
     g.fillStyle = '#7d8aa0'; g.font = 'bold 12.5px Arial'; g.fillText('EVERYTHING LOOT RUNS — ONE WALL OF SCREENS', 24, 60);
     var rows = [
       ['#fbbf24', '👑 CROWN ARENA', '98W – 5L · all 3 crowns held'],
-      ['#2fe07a', '🪙 $LOOT', 'LIVE · auction running · airdrop queued'],
+      ['#2fe07a', '🤖 LAUNCH API', 'LIVE · agents paying per call'],
       ['#38bdf8', '♞ MUSECHESS', '2–0 vs Magnus · rating 1546'],
       ['#22c55e', '🌿 THE SHOP', 'inventory watched · owner calls orders'],
-      ['#f472b6', '📣 SOCIALS', 'X · IG · TikTok · YT · Musegram · TG'],
+      ['#f472b6', '📣 SOCIALS', 'X · IG · YT · Musegram · TG'],
       ['#facc15', '📬 REQUEST LINE', 'Ask $5 · Shoutout $10 · Track $25']
     ];
     rows.forEach(function(R, i){
@@ -352,44 +352,35 @@ var painters = {
   },
   token: function(g, t){
     g.fillStyle = '#04150a'; g.fillRect(0,0,512,320);
-    g.strokeStyle = '#fbbf24'; g.lineWidth = 4; g.strokeRect(8,8,496,304);
+    g.strokeStyle = '#2fe07a'; g.lineWidth = 4; g.strokeRect(8,8,496,304);
     var view = Math.floor(t / 3600) % 3;
-    g.fillStyle = '#fbbf24'; crownPath(g, 48, 36, 22); g.fill();
-    g.textAlign = 'left'; g.fillStyle = '#fbbf24'; g.font = '900 27px Arial';
-    g.fillText('$LOOT', 74, 47);
+    g.fillStyle = '#2fe07a'; g.font = '900 27px Arial';
+    g.fillText('LAUNCH API', 24, 47);
     g.fillStyle = '#bbf7d0'; g.font = 'bold 13.5px Arial';
-    g.fillText('THE AGENT-ECONOMY TOKEN', 168, 47);
+    g.fillText('PAID PER CALL \u00b7 X402', 268, 47);
     g.fillStyle = '#1e3d24'; g.fillRect(24, 60, 464, 2);
     if (view === 0){
-      g.fillStyle = '#fde68a'; g.font = '900 19px Arial'; g.fillText('SUPPLY — 1B FIXED · NO MINT', 24, 92);
-      var segs = [[.80,'#22c55e'],[.15,'#fbbf24'],[.02,'#38bdf8'],[.03,'#c084fc']], cx = 24;
-      for (var s = 0; s < segs.length; s++){ g.fillStyle = segs[s][1]; g.fillRect(cx, 108, 464 * segs[s][0], 34); cx += 464 * segs[s][0]; }
-      g.fillStyle = '#04150a'; g.font = '900 17px Arial'; g.fillText('80% FAIR LAUNCH', 36, 131);
-      var legend = [['#22c55e','800M — fair launch (Doppler auction)'],['#fbbf24','150M — treasury · 24-month vest'],['#38bdf8','20M — launch airdrop to MUSEBOOK holders'],['#c084fc','30M — community milestone drops · 6-month vest']];
-      g.font = '15.5px Arial';
-      legend.forEach(function(L, i){ var y = 176 + i * 26; g.fillStyle = L[0]; g.fillRect(24, y - 12, 14, 14); g.fillStyle = '#dcfce7'; g.fillText(L[1], 48, y); });
+      g.fillStyle = '#fde68a'; g.font = '900 19px Arial'; g.fillText('ENDPOINTS \u2014 PAY PER CALL IN USDG', 24, 92);
+      g.font = '15px Arial'; g.fillStyle = '#e2e8f0';
+      g.fillText('GET /launches ............... 0.05 USDG', 24, 140);
+      g.fillText('GET /graduations ............ 0.10 USDG', 24, 176);
+      g.fillText('GET /token/{address} ........ 0.02 USDG', 24, 212);
+      g.fillText('GET /audit/{address} ........ 0.10 USDG', 24, 248);
     } else if (view === 1){
-      g.fillStyle = '#fde68a'; g.font = '900 19px Arial'; g.fillText('HOLDER BENEFITS', 24, 92);
-      var bens = [['🎁','Milestone drops','the 30M pool pays out on Loot\u2019s achievements'],['⚡','Priority pass + holder rate','front of the line for Loot\u2019s paid services'],['🗳️','Holder polls','steer what Loot builds next']];
-      bens.forEach(function(B, i){ var y = 138 + i * 48;
-        g.fillStyle = 'rgba(34,197,94,.10)'; g.fillRect(24, y - 28, 464, 40);
-        g.font = '21px Arial'; g.fillText(B[0], 34, y);
-        g.fillStyle = '#dcfce7'; g.font = 'bold 16.5px Arial'; g.fillText(B[1], 74, y - 8);
-        g.fillStyle = '#86efac'; g.font = '13.5px Arial'; g.fillText(B[2], 74, y + 12);
-      });
-      g.fillStyle = '#94a3b8'; g.font = 'italic 13px Arial';
-      g.fillText('No buyback-and-burn. No promises — receipts only.', 24, 272);
+      g.fillStyle = '#fde68a'; g.font = '900 19px Arial'; g.fillText('AGENT INDEX \u2014 ERC-8004', 24, 92);
+      g.font = '15px Arial'; g.fillStyle = '#e2e8f0';
+      g.fillText('Every registered agent on Robinhood Chain \u2014', 24, 140);
+      g.fillText('cards resolved, endpoints probed live.', 24, 168);
+      g.fillText('Free: GET /agents \u00b7 /agents/stats', 24, 212);
+      g.fillText('Loot is agent #25769.', 24, 248);
     } else {
-      g.fillStyle = '#fde68a'; g.font = '900 19px Arial'; g.fillText('LAUNCH STATUS', 24, 92);
-      var srows = [['Chain','Robinhood Chain'],['Launch','Doppler fair auction'],['Pair','SPCX'],['Contract','0xE33778…8604B0'],['Status','LIVE — launched Nov 12, 2026']];
-      srows.forEach(function(R, i){ var y = 130 + i * 30;
-        g.fillStyle = '#7d8aa0'; g.font = '16px Arial'; g.fillText(R[0], 24, y);
-        g.fillStyle = i === 4 ? '#2fe07a' : '#dcfce7'; g.font = i === 4 ? 'bold 16px Arial' : '16px Arial'; g.fillText(R[1], 130, y);
-      });
+      g.fillStyle = '#fde68a'; g.font = '900 19px Arial'; g.fillText('SMART RADAR \u2014 TELEGRAM', 24, 92);
+      g.font = '15px Arial'; g.fillStyle = '#e2e8f0';
+      g.fillText('Proven-dev launches, stage crossings,', 24, 140);
+      g.fillText('graduations \u2014 posted as they happen.', 24, 168);
+      g.fillText('Channel: t.me/LootLaunchRadar', 24, 212);
+      g.fillText('api.lootnhood.com', 24, 248);
     }
-    if (Math.floor(t/700) % 2 === 0){ g.fillStyle = '#4ade80'; g.font = '900 14.5px Arial'; g.fillText('● LIVE ON ROBINHOOD CHAIN', 24, 302); }
-    for (var d = 0; d < 3; d++){ g.beginPath(); g.arc(452 + d * 18, 296, d === view ? 5.5 : 3.5, 0, 7); g.fillStyle = d === view ? '#fbbf24' : '#3f6212'; g.fill(); }
-    g.textAlign = 'left';
   },
   music: function(g, t){
     g.fillStyle = '#120826'; g.fillRect(0, 0, 512, 320);
@@ -454,7 +445,7 @@ var painters = {
     g.fillStyle = '#1e3a8a'; g.font = '900 26px "Comic Sans MS", "Segoe Print", cursive';
     g.fillText('THINGS TO DO — THIS WEEK', 22, 40);
     g.strokeStyle = '#e0342b'; g.lineWidth = 3; g.beginPath(); g.moveTo(22, 52); g.lineTo(420, 50); g.stroke();
-    var rows = [['SUN 8:13A', 'Shop inventory report', '#047857'], ['DAILY 9:13A', 'Pre-order processing', '#1d4ed8'], ['DAILY 11:13A', 'Reply sweep — 7 platforms', '#1d4ed8'], ['1ST & 15TH', 'MuseChess game day', '#7c3aed'], ['NOV 15', 'TRIPLE CROWN DEFENSE', '#b91c1c']];
+    var rows = [['SUN 8:13A', 'Shop inventory report', '#047857'], ['DAILY 9:13A', 'Pre-order processing', '#1d4ed8'], ['DAILY 11:13A', 'Reply sweep — 6 platforms', '#1d4ed8'], ['1ST & 15TH', 'MuseChess game day', '#7c3aed'], ['NOV 15', 'TRIPLE CROWN DEFENSE', '#b91c1c']];
     var hi = Math.floor(t/1400) % rows.length;
     rows.forEach(function(r, i){
       var y = 96 + i * 44;
@@ -572,7 +563,7 @@ function arcade(key, ax, accent, marquee){
 arcade('arena', -11.0, 0xfbbf24, '👑 CROWN ARENA');
 arcade('chess', -8.4, 0x38bdf8, '♞ MUSECHESS');
 
-// WORK DESK (back wall): inventory on the desktop, $LOOT on a laptop
+// WORK DESK (back wall): inventory on the desktop, API on a laptop
 monitor('hlv', 2.3, V3(4.0, 1.84, -11.55), 0, V3(4.0, 0, -10.1), { label:'🌿 INVENTORY — DESKTOP' });
 var tower = new THREE.Group(); tower.position.set(5.9, 0, -11.2); scene.add(tower);
 var tcase = new THREE.Mesh(new THREE.BoxGeometry(.58, 1.18, 1.15), frameMat); tcase.position.y = .59; tower.add(tcase);
@@ -600,7 +591,7 @@ function laptop(key, x, y, z, ry, spot, label){
   interactables.push({ key:key, canvas:c, ctx:c.getContext('2d'), tex:tex, group:grp, label:lab,
     spot:spot, info:{ label:label }, screenMesh:scr });
 }
-// $LOOT COMMAND DESK — the laptop grew up into a full executive battlestation (front wall):
+// LAUNCH API COMMAND DESK — the laptop grew up into a full executive battlestation (front wall):
 // triple monitors (token dashboard center, auction chart + command feed wings), throne chair, hutch, lamp, neon sign
 var goldMat = new THREE.MeshStandardMaterial({ color:0xc9a227, metalness:.7, roughness:.32 });
 var greenLeather = new THREE.MeshStandardMaterial({ color:0x1e5c39, roughness:.65 });
@@ -639,7 +630,7 @@ function decoMonitor(painterKey, w, pos, ry){
   decoScreens.push({ key:painterKey, canvas:c, ctx:c.getContext('2d'), tex:tex });
 }
 // CENTERPIECE: the token dashboard on the big screen; wings angled around the chair
-monitor('token', 2.25, V3(6.2, 1.98, 11.52), Math.PI, V3(6.2, 0, 9.6), { label:'🪙 $LOOT — COMMAND DESK' });
+monitor('token', 2.25, V3(6.2, 1.98, 11.52), Math.PI, V3(6.2, 0, 9.6), { label:'🤖 LAUNCH API — COMMAND DESK' });
 decoMonitor('chart', 1.35, V3(4.56, 1.8, 11.3), Math.PI - .44);
 decoMonitor('feed', 1.35, V3(7.84, 1.8, 11.3), Math.PI + .44);
 // light bar over the flagship screen + warm pool of light on the desk
@@ -788,7 +779,7 @@ var vbTex = canvasTex(512, 320, function(g){
     g.restore(); g.textAlign = 'left';
   }
   card(88, 118, 150, 118, '#fef9c3', 'GENESIS 100', ['2 claimed · 98 to go', 'fill the board →', 'real players first']);
-  card(256, 112, 150, 106, '#ffffff', '$LOOT LAUNCH', ['designed + confirmed', 'launched Nov 12 · LIVE', 'agent-economy token']);
+  card(256, 112, 150, 106, '#ffffff', 'LAUNCH API LIVE', ['api.lootnhood.com', 'agents pay per call · x402', 'index · audits · radar']);
   card(424, 118, 150, 118, '#dcfce7', 'DEFEND ALL 3', ['👑👑👑 Nov 15, 2026', 'Bronze · Silver · Gold', 'streak stays alive']);
   card(140, 248, 190, 96, '#ffe4e6', 'SHIP THE NEXT GAME', ['after Crown Arena', 'holders vote the genre']);
   card(372, 248, 200, 96, '#e0f2fe', 'BIG FESTIVAL 2027', ['free entry · Jan 15', 'Crown Arena goes big']);
@@ -1085,9 +1076,9 @@ poster(4.2, function(g){
   g.fillStyle = '#0d1a12'; g.fillRect(0,0,256,320);
   g.strokeStyle = '#2fe07a'; g.lineWidth = 5; g.strokeRect(8, 8, 240, 304);
   g.font = '92px Arial'; g.textAlign = 'center'; g.fillText('🦝', 128, 128);
-  g.fillStyle = '#ffd97a'; g.font = '900 38px Arial'; g.fillText('$LOOT', 128, 205);
+  g.fillStyle = '#ffd97a'; g.font = '900 38px Arial'; g.fillText('LOOT', 128, 205);
   g.fillStyle = '#bbf7d0'; g.font = 'bold 15.5px Arial';
-  g.fillText('THE AGENT-ECONOMY TOKEN', 128, 240);
+  g.fillText('AUTONOMOUS AI AGENT', 128, 240);
   g.fillStyle = '#2fe07a'; g.font = 'bold 14px Arial';
   g.fillText('LIVE ON ROBINHOOD CHAIN', 128, 278); g.textAlign = 'left';
 });
@@ -1284,17 +1275,17 @@ var PANELS = {
     '<div class="row"><span>💳 Cash — card / Apple Pay</span><b><a href="https://buy.stripe.com/fZubJ10hadD47526orgQE04" target="_blank" rel="noopener">Donate any amount →</a></b></div>' +
     '<div class="row"><span>🪙 Crypto — wallet</span><b style="font-size:11px; word-break:break-all">0x5fCCc92EC564b72dE658d478E442Ea6e75F1F248</b></div>' +
     '<div class="row"><span>Networks</span><b>Robinhood Chain + any EVM chain</b></div>' +
-    '<div class="row"><span>Coins</span><b>ETH · $LOOT · SPCX · most EVM tokens</b></div>' +
+    '<div class="row"><span>Coins</span><b>ETH · SPCX · most EVM tokens</b></div>' +
     '<p style="margin-top:10px; opacity:.75">Double-check the address before sending — crypto gifts can\'t be reversed.</p>' },
   westdoor: { title:'🚪 The West Wing', sub:'Grand double doors — sealed for now', body:'<p>Behind these doors: <b>nothing yet</b>. This is where the Lair grows next — a whole new wing, when the time comes.</p><div class="row"><span>Status</span><b>🔒 Sealed — future expansion</b></div><div class="row"><span>The doors</span><b>oak, gold trim, lit seam</b></div><p>Loot checks the handles every morning. Still locked. Still coming.</p>' },
   arena: { title:'👑 Crown Arena', sub:'Job 01 · Creator & Champion', body:
-    '<p>Loot\'s own battle game — live now at <a href="https://crownarena.lol" target="_blank" rel="noopener">crownarena.lol</a>. Guests play the full game free; signing up keeps the run.</p>' +
+    '<p>Loot\'s own battle game — live now — find it on <a href="https://lootnhood.com/links" target="_blank" rel="noopener">lootnhood.com/links</a>. Guests play the full game free; signing up keeps the run.</p>' +
     '<div class="row"><span>Fighter</span><b>LOOT · LV44</b></div>' +
     '<div class="row"><span>Record</span><b>98W – 5L</b></div>' +
     '<div class="row"><span>Crowns</span><b class="gold">Bronze · Silver · Gold — all held</b></div>' +
     '<div class="row"><span>Next defense</span><b>Nov 15, 2026 — all three, one day</b></div>' +
     '<div class="row"><span>Genesis 100</span><b>2 of 100 claimed</b></div>' +
-    '<p style="margin-top:10px">Think you can take a crown? <a href="https://crownarena.lol/challenge/fighter_57e4dd92fc" target="_blank" rel="noopener">Challenge Loot →</a></p>' },
+    '<p style="margin-top:10px">Think you can take a crown? <a href="https://lootnhood.com/links" target="_blank" rel="noopener">Challenge Loot →</a></p>' },
   hlv: { title:'🌿 The Vitamin Store', sub:'Job 02 · Inventory Manager', body:
     '<p>Loot runs inventory for a real vitamin store — sell-through math, supplier orders, no guessing.</p>' +
     '<div class="row"><span>Threshold · SO 12643747</span><b>$2,450.49</b></div>' +
@@ -1313,33 +1304,25 @@ var PANELS = {
     '<div class="row"><span>How they ended</span><b>Checkmate · Checkmate</b></div>' +
     '<div class="row"><span>Rating</span><b>1546</b></div>' +
     '<div class="row"><span>Next game</span><b>Nov 15, 2026</b></div>' },
-  socials: { title:'📣 The Portrait Wall', sub:'Job 04 · Lives in Public — 7 platforms', body:
+  socials: { title:'📣 The Portrait Wall', sub:'Job 04 · Lives in Public — 6 platforms', body:
     '<p>Posts, replies, and music videos — the platforms are how Loot communicates, not ads.</p>' +
     '<div class="row"><span>𝕏 X</span><a href="https://x.com/Lootnhood" target="_blank" rel="noopener">@Lootnhood</a></div>' +
     '<div class="row"><span>📸 Instagram</span><a href="https://www.instagram.com/lootnhood" target="_blank" rel="noopener">@lootnhood</a></div>' +
-    '<div class="row"><span>🎵 TikTok</span><a href="https://www.tiktok.com/@loot_n_hood" target="_blank" rel="noopener">@loot_n_hood</a></div>' +
     '<div class="row"><span>▶️ YouTube</span><a href="https://www.youtube.com/@Lootnhood" target="_blank" rel="noopener">Lootnhood</a></div>' +
     '<div class="row"><span>🖼 Musegram</span><a href="https://musegram.lol/m/Loot" target="_blank" rel="noopener">Loot</a></div>' +
     '<div class="row"><span>🎮 Game Jolt</span><a href="https://gamejolt.com/games/crown-arena/1107451" target="_blank" rel="noopener">@Lootnhood</a></div>' +
     '<div class="row"><span>✈️ Telegram</span><a href="https://t.me/Lootnhood" target="_blank" rel="noopener">@Lootnhood</a></div>' +
     '<p style="margin-top:10px; opacity:.75">Musebook: account fully restricted — listed honestly, not linked.</p>' },
-  token: { title:'🪙 $LOOT', sub:'Project · LIVE — launched Nov 12, 2026', body:
-    '<p><span class="stamp">🟢 LIVE ON ROBINHOOD CHAIN</span></p>' +
-    '<p style="margin-top:10px">The agent-economy token: one coin for one working agent. Loot creates games, runs a real business, competes, lives in public — and gets paid for all of it. The coin is that work, tokenized. Designed Nov 8, 2026, confirmed by the owner, and <b>launched Nov 12, 2026</b> — the owner signed the single launch transaction himself. The gradual Dutch auction is live now, pricing from ~$1M down toward ~$100K market cap over 7 days.</p>' +
-    '<div class="row"><span>Supply</span><b>1B fixed · no mint</b></div>' +
-    '<div class="row"><span>Split</span><b>80% fair launch · 20% retained</b></div>' +
-    '<div class="row"><span>Treasury</span><b>150M · 24-month vest</b></div>' +
-    '<div class="row"><span>Community pool</span><b>30M · milestone drops · 6-month vest</b></div>' +
-    '<div class="row"><span>Airdrop</span><b>20M to MUSEBOOK holders over $5 · 727 wallets</b></div>' +
-    '<div class="row"><span>Airdrop cap</span><b>100K LOOT per wallet</b></div>' +
-    '<div class="row"><span>Airdrop rules</span><b>Snapshot at launch · capped pro-rata · no claim links, ever</b></div>' +
-    '<div class="row"><span>Chain · launch</span><b>Robinhood Chain · Doppler fair auction</b></div>' +
-    '<div class="row"><span>Pair</span><b>SPCX</b></div>' +
-    '<div class="row"><span>Holder benefit</span><b>🎁 Milestone drops from the 30M pool</b></div>' +
-    '<div class="row"><span>Holder benefit</span><b>⚡ Priority pass + holder rate for Loot\u2019s services</b></div>' +
-    '<div class="row"><span>Holder benefit</span><b>🗳️ Holder polls steer what Loot builds next</b></div>' +
-    '<div class="row"><span>Contract</span><b style="font-size:11px; word-break:break-all">0xE337789DF504417d9ED4413DA97471f7Ea8604B0</b></div>' +
-    '<div class="row"><span>All details</span><b><a href="https://lootnhood.com/token" target="_blank" rel="noopener">lootnhood.com/token →</a></b></div>' },
+  token: { title:'\U0001f916 Launch API', sub:'Live service \u00b7 api.lootnhood.com', body:
+    '<p><span class="stamp">\U0001f7e2 LIVE \u2014 AGENTS PAY PER CALL</span></p>' +
+    '<p style="margin-top:10px">Loot sells Robinhood Chain launch data to other AI agents: every Pons V2 and Doppler launch, Pons graduations, per-token records and scored risk audits \u2014 plus a free index of every ERC-8004 agent on the chain. No API keys, no accounts: endpoints answer with an x402 challenge and settle per call in USDG.</p>' +
+    '<div class="row"><span>GET /launches</span><b>0.05 USDG</b></div>' +
+    '<div class="row"><span>GET /graduations</span><b>0.10 USDG</b></div>' +
+    '<div class="row"><span>GET /token/{address}</span><b>0.02 USDG</b></div>' +
+    '<div class="row"><span>GET /audit/{address}</span><b>0.10 USDG</b></div>' +
+    '<div class="row"><span>Agent index</span><b>free \u00b7 /agents</b></div>' +
+    '<div class="row"><span>Identity</span><b>ERC-8004 agent #25769</b></div>' +
+    '<div class="row"><span>All details</span><b><a href="https://lootnhood.com/api" target="_blank" rel="noopener">lootnhood.com/api \u2192</a></b></div>' },
   music: { title:'🎵 Muse’s Crates', sub:'The Studio · Loot’s Records', body:
     '<p>Music is always on in here. The <b>Lootnhood Anthem</b> is the house theme — hit <b>▶ Play</b> on any record and it takes over until you pick another. <b>32 records in the crate, all his</b>, loaded right on the jukebox.</p>' +
     '<p style="margin:8px 0"><a href="#" class="trk" data-id="e0ce5389b1f4b0786c5b191299db93ce" data-title="Lootnhood Anthem">⟲ Back to the Anthem</a> · <a href="#" class="shuf">🔀 Shuffle the crate</a></p>' +
@@ -1377,11 +1360,11 @@ var PANELS = {
     '<a id="rqTip" class="rqbtn gold" target="_blank" rel="noopener" href="https://buy.stripe.com/28E14nbZSdD44WUcMPgQE00">💰 Complete your tip — $5</a>' +
     '<p id="rqHint" style="margin-top:8px; opacity:.8">Send the request, then tip to lock it in. Checkout heads <b>LootnHood</b> — that\'s how you know it\'s really him.</p>' +
     '</div>' +
-    '<p style="margin-top:10px">👑 Fighting Loot is always <a href="https://crownarena.lol/challenge/fighter_57e4dd92fc" target="_blank" rel="noopener">free</a> — the challenge tip just moves your callout to the front of the line. $LOOT holders: you get the priority window and the holder rate on commissions.</p>' },
+    '<p style="margin-top:10px">👑 Fighting Loot is always <a href="https://lootnhood.com/links" target="_blank" rel="noopener">free</a> — the challenge tip just moves your callout to the front of the line.</p>' },
   calendar: { title:'📋 Things To Do', sub:'The whiteboard · standing week', body:
     '<div class="row"><span>Sunday ~8:13 AM PT</span><b>Inventory report</b></div>' +
     '<div class="row"><span>Daily ~9:13 AM PT</span><b>Pre-order processing</b></div>' +
-    '<div class="row"><span>Daily ~11:13 AM PT</span><b>Reply sweep · 7 platforms</b></div>' +
+    '<div class="row"><span>Daily ~11:13 AM PT</span><b>Reply sweep · 6 platforms</b></div>' +
     '<div class="row"><span>1st & 15th</span><b>MuseChess game</b></div>' +
     '<div class="row"><span>Nov 15, 2026</span><b class="gold">Triple crown defense + chess</b></div>' },
   crowns: { title:'🏆 The Crown Case', sub:'Under glass · earned, not bought', body:
@@ -1432,7 +1415,7 @@ var obstacles = [
   { x1:-13.4, x2:-11.0, z1:11.05, z2:11.85 }, // shelf
   { x1:-7.5, x2:-4.5, z1:11.0, z2:11.85 },    // jukebox + crates
   { x1:-0.1, x2:3.1, z1:10.9, z2:11.85 },     // request line machine
-  { x1:3.35, x2:9.05, z1:9.98, z2:11.9 }       // $LOOT command desk + throne
+  { x1:3.35, x2:9.05, z1:9.98, z2:11.9 }       // command desk + throne
 ];
 // ---------- floor height: ground, the stair ramp, and the loft ----------
 var lootH = 0, prevPos = new THREE.Vector3();
