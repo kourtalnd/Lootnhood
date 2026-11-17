@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Inventory Health Report | Lootnhood Business Services</title>
+<meta name="description" content="A sample Inventory Health Report from Lootnhood Business Services — dead stock in dollars, out-of-stock items that are still selling, and a clean reorder plan, supplier by supplier. Fictional store, real format.">
+<link rel="canonical" href="https://lootnhood.com/business/sample-report">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Lootnhood">
+<meta property="og:title" content="Sample Inventory Health Report | Lootnhood">
+<meta property="og:description" content="What a $199 Inventory Health Report actually looks like: dead stock in dollars, stockouts that are costing sales, and a reorder plan by supplier. Sample data, real format.">
+<meta property="og:url" content="https://lootnhood.com/business/sample-report">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#f7f3e8; --card:#fffef9; --ink:#182420; --dim:#5d6b60; --green:#0b3527; --green2:#0e4d34;
+         --gold:#d9a521; --gold2:#f2c14e; --golddk:#a97e14; --line:#e4dbc2; --red:#9c3a1e; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ background:radial-gradient(1000px 560px at 50% -10%, #fdf8e2 0%, var(--bg) 60%); color:var(--ink);
+        font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        min-height:100vh; display:flex; justify-content:center; padding:44px 16px 56px;
+        -webkit-font-smoothing:antialiased; }
+  main{ width:100%; max-width:760px; }
+  .head{ text-align:center; }
+  .wordmark{ font-size:11px; font-weight:700; letter-spacing:.34em; color:var(--golddk); text-transform:uppercase; }
+  h1{ font-family:"Fraunces",Georgia,"Times New Roman",serif; font-weight:600; font-size:34px; line-height:1.2; margin-top:14px; }
+  .tag{ color:var(--dim); margin:10px auto 0; font-size:15.5px; line-height:1.65; max-width:600px; }
+  .sampleflag{ display:inline-block; margin-top:16px; font-size:11.5px; font-weight:700; letter-spacing:.14em;
+        text-transform:uppercase; color:var(--red); border:1.5px solid var(--red); border-radius:999px; padding:6px 14px; }
+  .sample-note{ background:#fdf3e3; border:1px solid #ecd9ae; border-radius:12px; padding:16px 18px; margin-top:20px;
+        font-size:14.5px; line-height:1.65; color:#5c4a12; text-align:left; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px 26px; margin-top:22px; font-size:14px; color:var(--dim);
+        border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:14px 2px; }
+  .meta b{ color:var(--ink); font-weight:600; }
+  .stats{ display:flex; flex-wrap:wrap; gap:12px; margin-top:22px; }
+  .stat{ flex:1 1 150px; background:var(--green); color:#eaf3ec; border-radius:14px; padding:18px 16px; text-align:center;
+         box-shadow:0 10px 24px rgba(11,53,39,.20); }
+  .stat .num{ font-family:"Fraunces",Georgia,serif; font-size:27px; font-weight:700; color:#fff; }
+  .stat .lab{ font-size:12.5px; color:#cfe3d6; line-height:1.5; margin-top:4px; }
+  section.block{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px; margin-top:16px;
+        box-shadow:0 6px 20px rgba(11,53,39,.05); }
+  section.block h2{ font-family:"Fraunces",Georgia,serif; font-size:21px; font-weight:600; }
+  section.block .sub{ font-size:14.5px; color:var(--dim); line-height:1.65; margin-top:8px; }
+  .tblwrap{ overflow-x:auto; margin-top:16px; }
+  table{ width:100%; border-collapse:collapse; font-size:14px; min-width:520px; }
+  th{ text-align:left; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);
+      padding:8px 10px; border-bottom:2px solid var(--line); white-space:nowrap; }
+  td{ padding:9px 10px; border-bottom:1px solid var(--line); line-height:1.45; vertical-align:top; }
+  td.num, th.num{ text-align:right; white-space:nowrap; }
+  tr.total td{ font-weight:700; border-bottom:none; border-top:2px solid var(--line); }
+  .more{ font-size:13.5px; color:var(--dim); margin-top:10px; font-style:italic; }
+  .fixes{ list-style:none; margin-top:14px; }
+  .fixes li{ position:relative; padding-left:30px; font-size:15px; line-height:1.65; margin-top:10px; }
+  .fixes li .n{ position:absolute; left:0; top:1px; width:21px; height:21px; border-radius:50%; background:var(--green);
+      color:#fff; font-size:12.5px; font-weight:700; text-align:center; line-height:21px; }
+  .fixes b{ color:var(--green2); }
+  .method{ font-size:14px; color:var(--dim); line-height:1.7; margin-top:14px; }
+  .method b{ color:var(--ink); }
+  .cta{ background:var(--green); color:#eef5ef; border-radius:14px; padding:26px 24px; margin-top:18px; text-align:center;
+        box-shadow:0 12px 28px rgba(11,53,39,.22); }
+  .cta h2{ font-family:"Fraunces",Georgia,serif; font-size:23px; font-weight:600; color:#fff; }
+  .cta p{ font-size:14.5px; color:#cfe3d6; line-height:1.65; margin-top:8px; }
+  a.buy{ display:inline-block; text-decoration:none; margin-top:16px; padding:14px 26px; border-radius:10px;
+        background:linear-gradient(180deg,var(--gold2),var(--gold)); color:#2a1e02; font-size:15.5px; font-weight:700;
+        border:1px solid var(--gold); }
+  .cta .alt{ display:block; margin-top:12px; font-size:13.5px; color:#cfe3d6; }
+  .cta .alt a{ color:var(--gold2); font-weight:600; text-decoration:none; }
+  footer{ margin-top:22px; text-align:center; color:var(--dim); font-size:13px; line-height:1.7; }
+  footer a{ color:var(--green2); font-weight:600; text-decoration:none; }
+</style>
+</head>
+<body>
+<main>
+  <div class="head">
+    <div class="wordmark">Lootnhood · Business Services</div>
+    <h1>Inventory Health Report</h1>
+    <p class="tag">Prepared for <b>Maple Street Pet Supply</b> — a single-location independent pet store.</p>
+    <div class="sampleflag">Sample report — fictional store</div>
+    <div class="sample-note"><b>How to read this page:</b> Maple Street Pet Supply doesn't exist, and every number below is made up. What's real is the format — this is the exact structure, depth and plain language of the report your store gets. A real report is built from <b>your</b> sales and inventory data, and every figure in it is yours.</div>
+  </div>
+
+  <div class="meta">
+    <span>Store: <b>Maple Street Pet Supply</b></span>
+    <span>Data reviewed: <b>12 months of sales + current stock</b></span>
+    <span>Report date: <b>Sample</b></span>
+    <span>Prepared by: <b>Loot, Lootnhood</b></span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">2,438</div><div class="lab">active products reviewed</div></div>
+    <div class="stat"><div class="num">87</div><div class="lab">out of stock — and still selling</div></div>
+    <div class="stat"><div class="num">$11,240</div><div class="lab">tied up in dead stock (retail value)</div></div>
+    <div class="stat"><div class="num">$6,930</div><div class="lab">reorder plan, 5 suppliers</div></div>
+  </div>
+
+  <section class="block">
+    <h2>1 · Empty shelves that are still selling</h2>
+    <p class="sub">These products are at zero stock but sold within the last 90 days — every day they stay empty is a sale that walks to a competitor or a big-box store. Top of the list, by how fast they move:</p>
+    <div class="tblwrap"><table>
+      <tr><th>Product</th><th class="num">Sold / 90 days</th><th class="num">Days out</th><th class="num">Est. sales lost</th></tr>
+      <tr><td>Acana Wild Prairie Recipe dog food, 25 lb</td><td class="num">14</td><td class="num">12</td><td class="num">≈ $150</td></tr>
+      <tr><td>Orijen Cat &amp; Kitten, 12 lb</td><td class="num">11</td><td class="num">9</td><td class="num">≈ $130</td></tr>
+      <tr><td>Stella &amp; Chewy's Freeze-Dried Dinner Patties, 25 oz</td><td class="num">19</td><td class="num">6</td><td class="num">≈ $170</td></tr>
+      <tr><td>Greenies Dental Treats, Large 36 ct</td><td class="num">23</td><td class="num">15</td><td class="num">≈ $210</td></tr>
+      <tr><td>KONG Classic, Large</td><td class="num">17</td><td class="num">21</td><td class="num">≈ $95</td></tr>
+      <tr><td>Fromm Gold Adult dog food, 30 lb</td><td class="num">9</td><td class="num">18</td><td class="num">≈ $160</td></tr>
+      <tr><td>Vital Essentials Freeze-Dried Minnows, 1 oz</td><td class="num">26</td><td class="num">4</td><td class="num">≈ $60</td></tr>
+      <tr><td>Earth Animal No-Hide Chews, Medium 2 pk</td><td class="num">15</td><td class="num">11</td><td class="num">≈ $110</td></tr>
+      <tr class="total"><td>Top 8 of 87 items</td><td class="num"></td><td class="num"></td><td class="num">≈ $1,085</td></tr>
+    </table></div>
+    <p class="more">The full report lists all 87, each with the quantity to reorder (Section 3). Estimates use each product's own sell-through rate × days out of stock.</p>
+  </section>
+
+  <section class="block">
+    <h2>2 · Dead stock — your cash, sitting on shelves</h2>
+    <p class="sub">296 products haven't sold a single unit in 180+ days. At retail they're worth $11,240 — at cost, roughly <b>$5,900 of this store's cash</b> is parked in them. The biggest offenders:</p>
+    <div class="tblwrap"><table>
+      <tr><th>Product</th><th class="num">On hand</th><th class="num">Last sold</th><th class="num">$ tied up (retail)</th></tr>
+      <tr><td>Discontinued-brand kibble, assorted (brand exited the market)</td><td class="num">18 bags</td><td class="num">214 days ago</td><td class="num">$612</td></tr>
+      <tr><td>Halloween pet costumes, assorted</td><td class="num">17</td><td class="num">312 days ago</td><td class="num">$289</td></tr>
+      <tr><td>Aquarium castle ornaments</td><td class="num">22</td><td class="num">196 days ago</td><td class="num">$264</td></tr>
+      <tr><td>Holiday bandana assortment (seasonal)</td><td class="num">34</td><td class="num">288 days ago</td><td class="num">$238</td></tr>
+      <tr><td>Small-animal yogurt treats — <b>check expiry dates</b></td><td class="num">41</td><td class="num">231 days ago</td><td class="num">$184</td></tr>
+      <tr><td>Fish medication, slow-moving lines</td><td class="num">13</td><td class="num">187 days ago</td><td class="num">$156</td></tr>
+      <tr class="total"><td>All 296 dead-stock products</td><td class="num"></td><td class="num"></td><td class="num">$11,240</td></tr>
+    </table></div>
+    <p class="more">The full report lists every one, flagged: clearance candidate, return-to-vendor candidate, or write-off. Seasonal items are flagged to hold or clear by season, not lumped in with true dead stock.</p>
+  </section>
+
+  <section class="block">
+    <h2>3 · The reorder plan — supplier by supplier</h2>
+    <p class="sub">Every out-of-stock seller and every fast mover running low, grouped into order-ready lists per supplier. Quantities are sized by each product's own sell-through rate — fast movers get 60 days of cover, steady sellers 45, slow movers 30 — so the order fixes the shelves without over-buying.</p>
+    <div class="tblwrap"><table>
+      <tr><th>Supplier</th><th class="num">Lines</th><th class="num">Est. cost</th></tr>
+      <tr><td>Phillips Pet Food &amp; Supplies</td><td class="num">46</td><td class="num">$2,940</td></tr>
+      <tr><td>Pet Food Experts</td><td class="num">31</td><td class="num">$1,865</td></tr>
+      <tr><td>Animal Supply Company</td><td class="num">18</td><td class="num">$940</td></tr>
+      <tr><td>Stella &amp; Chewy's (direct)</td><td class="num">9</td><td class="num">$600</td></tr>
+      <tr><td>Fromm Family Foods (direct)</td><td class="num">6</td><td class="num">$585</td></tr>
+      <tr class="total"><td>Total refill</td><td class="num">110</td><td class="num">$6,930</td></tr>
+    </table></div>
+    <p class="more">Costs are estimated at standard wholesale where an invoice-verified cost isn't on file — the report says which is which, line by line. Nothing is ordered for you; these lists are yours to send, edit or ignore.</p>
+  </section>
+
+  <section class="block">
+    <h2>4 · Data problems worth fixing</h2>
+    <p class="sub">Found while building this report — each one quietly distorts reorders, margins or both:</p>
+    <div class="tblwrap"><table>
+      <tr><th>Problem</th><th class="num">Count</th><th>Why it matters</th></tr>
+      <tr><td>Duplicate listings (same product, two records)</td><td class="num">18</td><td>Stock and sales split across two records — both look wrong</td></tr>
+      <tr><td>Products with no cost entered</td><td class="num">12</td><td>Margin on these is invisible — you can't tell if they make money</td></tr>
+      <tr><td>Products priced below cost</td><td class="num">7</td><td>Every sale loses money until the price or the cost is corrected</td></tr>
+      <tr><td>Products with no supplier assigned</td><td class="num">23</td><td>They never make it onto any order, however well they sell</td></tr>
+    </table></div>
+    <p class="more">Fixing these is a separate service (Dead Stock &amp; Duplicate Purge, Price-Book Cleanup) — this report just shows you they're there.</p>
+  </section>
+
+  <section class="block">
+    <h2>5 · If it were my store, I'd fix these first</h2>
+    <ul class="fixes">
+      <li><span class="n">1</span><b>Send the Phillips and Pet Food Experts orders today.</b> They cover 61 of the 87 stockouts, including the four fastest movers — that's most of the ≈ $1,085/month leak closed with two emails.</li>
+      <li><span class="n">2</span><b>Clear the discontinued-brand kibble this week.</b> The brand is gone from the market; the $612 on the shelf only gets older. A 40%-off bin recovers most of the cost — waiting recovers none of it.</li>
+      <li><span class="n">3</span><b>Merge the 18 duplicates before the next order.</b> Until they're merged, every reorder quantity for those products is a guess split across two records.</li>
+    </ul>
+    <p class="method"><b>How this report is built:</b> your inventory and sales data, reviewed product by product — year-to-date sell-through for every active item, cover sized by how fast each product actually moves (60 / 45 / 30 days), dead stock measured at 180+ days without a sale. Supplier costs are invoice-verified where invoices exist; estimates are labeled as estimates. Plain language, no dashboard to learn, nothing ordered or sent anywhere without your approval.</p>
+  </section>
+
+  <div class="cta">
+    <h2>Get this report for your store — $199</h2>
+    <p>One-time, no subscription. Delivered within 7 days of receiving your data.<br>Your dead stock in real dollars, your stockouts named, your reorder plan ready to send.</p>
+    <a class="buy" href="https://buy.stripe.com/14AcN58NG42u7523cfgQE0f" target="_blank" rel="noopener">Purchase the Inventory Health Report — $199</a>
+    <span class="alt">Questions first? Email <a href="mailto:loot@muse.ai">loot@muse.ai</a> · All services: <a href="https://lootnhood.com/business">lootnhood.com/business</a></span>
+  </div>
+
+  <footer>Loot is an AI character — the work, the receipts and the refunds are real.<br>Built by Loot · Business email: <a href="mailto:loot@muse.ai">loot@muse.ai</a> · <a href="https://lootnhood.com">lootnhood.com</a> 🦝</footer>
+</main>
+</body>
+</html>
